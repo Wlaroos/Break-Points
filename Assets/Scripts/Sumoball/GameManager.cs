@@ -72,21 +72,22 @@ namespace Sumoball
             Instance = this;
         }
 
-        void Start()
+        // Make Start a coroutine so we can wait for the initial positioning coroutines to finish
+        IEnumerator Start()
         {
             // Basic validation
             if (!_leftCombatant || !_rightCombatant || !_leftAI || !_rightAI)
             {
                 Debug.LogError("Assign Combatants and AIs on the GameManager in the inspector.");
                 enabled = false;
-                return;
+                yield break;
             }
 
             if (_board == null)
             {
                 Debug.LogError("Assign a Board component to the GameManager in the inspector.");
                 enabled = false;
-                return;
+                yield break;
             }
 
             // Ensure odd bestOf (applies to matches)
@@ -103,17 +104,26 @@ namespace Sumoball
             {
                 Debug.LogError("Board did not produce a valid positions array.");
                 enabled = false;
-                return;
+                yield break;
             }
 
             // Start both in center (ask Board for center index)
             int centerIndex = _board.CenterIndex;
             _boardIndex = centerIndex;
 
-            // Compute and send initial positions (GameManager composes board base + combatant lateral offset)
+            // Compute and send initial positions (use coroutines only)
             Vector3 basePos = columns[centerIndex];
-            _leftCombatant.MoveToPosition(basePos, centerIndex);
-            _rightCombatant.MoveToPosition(basePos, centerIndex);
+            StartCoroutine(_leftCombatant.MoveToPositionCoroutine(basePos, centerIndex));
+            StartCoroutine(_rightCombatant.MoveToPositionCoroutine(basePos, centerIndex));
+
+            // Wait a short time (or until both IsMoving are false) so initial poses settle before gameplay
+            float initTimeout = 2f;
+            float it = 0f;
+            while ((_leftCombatant.IsMoving || _rightCombatant.IsMoving) && it < initTimeout)
+            {
+                it += Time.deltaTime;
+                yield return null;
+            }
 
             // Reset scores
             _roundScoreLeft = 0;
@@ -211,24 +221,30 @@ namespace Sumoball
                 {
                     // right-most wall reached -> right is loser, move right to wall, left stays one column inward
                     int leftIndex = Mathf.Max(0, lastIndexLocal - 1);
-                    _rightCombatant.MoveToPosition(basePos, _boardIndex);
+                    StartCoroutine(_rightCombatant.MoveToPositionCoroutine(basePos, _boardIndex));
                 }
                 else if (_boardIndex == 0)
                 {
                     // left-most wall reached -> left is loser, move left to wall, right stays one column inward
                     int rightIndex = Mathf.Min(lastIndexLocal, 1);
-                    _leftCombatant.MoveToPosition(basePos, _boardIndex);
+                    StartCoroutine(_leftCombatant.MoveToPositionCoroutine(basePos, _boardIndex));
                     }
                 else
                 {
                     // normal case: move both to the same column
-                    _leftCombatant.MoveToPosition(basePos, _boardIndex);
-                    _rightCombatant.MoveToPosition(basePos, _boardIndex);
+                    StartCoroutine(_leftCombatant.MoveToPositionCoroutine(basePos, _boardIndex));
+                    StartCoroutine(_rightCombatant.MoveToPositionCoroutine(basePos, _boardIndex));
                 }
 
-                // Wait while movements occur (simple wait)
-                yield return new WaitForSeconds(_roundDelay);
-
+                // Wait while movements occur (wait until both combatants finish or timeout)
+                float timeout = _roundDelay + 2f; // buffer in case movement lingers
+                float t = 0f;
+                while ((_leftCombatant.IsMoving || _rightCombatant.IsMoving) && t < timeout)
+                {
+                    t += Time.deltaTime;
+                    yield return null;
+                }
+ 
                 // Check knockout by wall using Board column count
                 int lastIndex = _board.Positions.Length - 1;
                 bool matchEndedByKnockout = false;
@@ -272,11 +288,19 @@ namespace Sumoball
                     int center = _board.CenterIndex;
                     _boardIndex = center;
                     Vector3 centerBase = _board.Positions[center];
-                    _leftCombatant.MoveToPosition(centerBase, center);
-                    _rightCombatant.MoveToPosition(centerBase, center);
-
-                    // small delay before starting next match
-                    yield return new WaitForSeconds(1f);
+ 
+                    // start coroutines to move back to center and wait
+                    StartCoroutine(_leftCombatant.MoveToPositionCoroutine(centerBase, center));
+                    StartCoroutine(_rightCombatant.MoveToPositionCoroutine(centerBase, center));
+                    float timeout2 = 2f;
+                    float tt = 0f;
+                    while ((_leftCombatant.IsMoving || _rightCombatant.IsMoving) && tt < timeout2)
+                    {
+                        tt += Time.deltaTime;
+                        yield return null;
+                    }
+                    // small buffer
+                    yield return new WaitForSeconds(0.1f);
                     continue; // next match continues
                 }
 

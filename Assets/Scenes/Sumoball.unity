@@ -1208,7 +1208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26048be87b365be4ebbd879a8f3bfbf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushSpeed: 10
+  _pushSpeed: 25
   _lateralSeparation: 0.6
   _feedbackDuration: 0.25
   _feedbackNudge: 0.22
@@ -1223,7 +1223,7 @@ MonoBehaviour:
   _ui: {fileID: 316784517}
   _board: {fileID: 2140114424}
   _bestOf: 3
-  _roundDelay: 0.2
+  _roundDelay: 0.15
   _countdownStart: 1
 --- !u!4 &1846495892
 Transform:
@@ -1404,7 +1404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _columns: 5
-  _spanMultiplier: 6
+  _spanMultiplier: 7
   _markerSprite: {fileID: -2413806693520163455, guid: f6df18aaee8a7c64fbf835e2fec329c7, type: 3}
   _markerColor: {r: 0.79276145, g: 0.58805025, b: 1, a: 0.9}
   _markerSize: 0.25

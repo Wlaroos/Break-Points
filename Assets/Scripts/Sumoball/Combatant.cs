@@ -63,6 +63,51 @@ namespace Sumoball
             isMoving = true;
         }
 
+        // Public state other systems (GameManager) can wait on
+        public bool IsMoving { get; private set; }
+        private Coroutine _moveCoroutine;
+
+        // Example coroutine that moves this transform smoothly to the computed position.
+        // Replace lateral offset logic with whatever your existing MoveToPosition used.
+        public IEnumerator MoveToPositionCoroutine(Vector3 basePosition, int columnIndex)
+        {
+            // If already moving, stop previous movement (or bail depending on desired behavior)
+            if (_moveCoroutine != null)
+            {
+                StopCoroutine(_moveCoroutine);
+                _moveCoroutine = null;
+            }
+
+            IsMoving = true;
+            // compute target using GameManager.LateralSeparation etc.
+            Vector3 target = basePosition + (_isLeft ? Vector3.left : Vector3.right) * (GameManager.Instance != null ? GameManager.Instance.LateralSeparation : 0.6f);
+            float tolerance = 0.01f;
+            float speed = GameManager.Instance.PushSpeed;
+
+            while (Vector3.Distance(transform.position, target) > tolerance)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+                yield return null;
+            }
+
+            transform.position = target;
+            IsMoving = false;
+            _moveCoroutine = null;
+        }
+
+        // Optionally keep old MoveToPosition wrapper for compatibility (if you had one),
+        // but prefer using the coroutine from GameManager.
+        // public void MoveToPosition(Vector3 basePosition, int columnIndex)
+        // {
+        //     // if you want to preserve existing instantaneous or internally-handled movement,
+        //     // keep your old implementation here. Otherwise prefer MoveToPositionCoroutine.
+        //     _currentIndex = columnIndex;
+        //     float lateralSeparation = GameManager.Instance != null ? GameManager.Instance.LateralSeparation : 0.6f;
+        //     Vector3 lateral = (_isLeft ? Vector3.left : Vector3.right) * lateralSeparation;
+        //     _targetPosition = basePosition + lateral;
+        //     isMoving = true;
+        // }
+
         // Check side using board column count supplied by caller (Board owns columns)
         public bool IsOnSide(int boardColumns)
         {
