@@ -5,6 +5,34 @@ namespace FanExperiencePrototypes
 {
     public class GameManager : MonoBehaviour
     {
+        // Singleton
+        public static GameManager Instance { get; private set; }
+
+        // Shared combatant settings moved from Combatant
+        [Header("Shared Combatant Settings")]
+        [SerializeField] private float _pushSpeed = 4f; // speed of being pushed
+        public float PushSpeed => _pushSpeed;
+
+        [SerializeField] private float _lateralSeparation = 0.6f;
+        public float LateralSeparation => _lateralSeparation;
+
+        [Header("Round Feedback")]
+        [SerializeField] private float _feedbackDuration = 0.25f;
+        public float FeedbackDuration => _feedbackDuration;
+        [SerializeField] private float _feedbackNudge = 0.22f;
+        public float FeedbackNudge => _feedbackNudge;
+        [SerializeField] private float _feedbackScale = 1.12f;
+        public float FeedbackScale => _feedbackScale;
+
+        [Header("Feedback Tints")]
+        [SerializeField] private Color _winTint = Color.white;
+        public Color WinTint => _winTint;
+        [SerializeField] private Color _loseTint = new Color(0.8f, 0.6f, 0.6f);
+        public Color LoseTint => _loseTint;
+        [SerializeField] private Color _neutralTint = Color.white;
+        public Color NeutralTint => _neutralTint;
+
+        [Header("Combatants")]
         [SerializeField] private Combatant _leftCombatant;
         [SerializeField] private Combatant _rightCombatant;
         [SerializeField] private PlayerAI _leftAI;
@@ -31,6 +59,17 @@ namespace FanExperiencePrototypes
         private int _matchWinsRight = 0;
 
         private int _winsNeeded = 1;
+
+        void Awake()
+        {
+            // setup singleton early so Combatants can read settings in Start()
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+        }
 
         void Start()
         {
@@ -151,8 +190,26 @@ namespace FanExperiencePrototypes
 
                 // Move both combatants to the new board positions
                 Vector3 basePos = _board.Positions[_boardIndex];
-                _leftCombatant.MoveToPosition(basePos, _boardIndex);
-                _rightCombatant.MoveToPosition(basePos, _boardIndex);
+                int lastIndexLocal = _board.Positions.Length - 1;
+                // If we've hit an edge, only move the loser to the wall column.
+                if (_boardIndex == lastIndexLocal)
+                {
+                    // right-most wall reached -> right is loser, move right to wall, left stays one column inward
+                    int leftIndex = Mathf.Max(0, lastIndexLocal - 1);
+                    _rightCombatant.MoveToPosition(basePos, _boardIndex);
+                }
+                else if (_boardIndex == 0)
+                {
+                    // left-most wall reached -> left is loser, move left to wall, right stays one column inward
+                    int rightIndex = Mathf.Min(lastIndexLocal, 1);
+                    _leftCombatant.MoveToPosition(basePos, _boardIndex);
+                    }
+                else
+                {
+                    // normal case: move both to the same column
+                    _leftCombatant.MoveToPosition(basePos, _boardIndex);
+                    _rightCombatant.MoveToPosition(basePos, _boardIndex);
+                }
 
                 // Wait while movements occur (simple wait)
                 yield return new WaitForSeconds(_roundDelay);

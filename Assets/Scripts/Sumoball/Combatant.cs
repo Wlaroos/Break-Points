@@ -8,9 +8,8 @@ namespace FanExperiencePrototypes
     {
         [SerializeField] private string _combatantName = "Fighter";
         public string CombatantName { get { return _combatantName; } }
-        [SerializeField] private float _pushSpeed = 4f; // speed of being pushed
 
-        // NOTE: Board positions removed from Combatant - Board owns the grid.
+        // per-combatant state
         [SerializeField] private int _currentIndex = 0; // will be set by GameManager to center
         public int CurrentIndex
         {
@@ -21,21 +20,6 @@ namespace FanExperiencePrototypes
         // whether this combatant is the left-side fighter (used to offset so fighters don't overlap)
         [SerializeField] private bool _isLeft = true;
         public bool IsLeft => _isLeft;
-
-        // How far to offset each fighter from the central column position (tweak in Inspector)
-        [SerializeField] private float _lateralSeparation = 0.6f;
-        public float LateralSeparation => _lateralSeparation;
-
-        // Feedback settings
-        [Header("Round Feedback")]
-        [SerializeField] private float _feedbackDuration = 0.25f;
-        [SerializeField] private float _feedbackNudge = 0.22f;
-        [SerializeField] private float _feedbackScale = 1.12f;
-
-        [Header("Feedback Tints")]
-        [SerializeField] private Color _winTint = Color.white;
-        [SerializeField] private Color _loseTint = new Color(0.8f, 0.6f, 0.6f);
-        [SerializeField] private Color _neutralTint = Color.white;
 
         private Vector3 _targetPosition;
         private bool isMoving;
@@ -58,7 +42,9 @@ namespace FanExperiencePrototypes
         {
             if (isMoving)
             {
-                transform.position = Vector3.MoveTowards(transform.position, _targetPosition, _pushSpeed * Time.deltaTime);
+                // read shared speed from GameManager singleton (fallback to 4f if none)
+                float speed = GameManager.Instance != null ? GameManager.Instance.PushSpeed : 4f;
+                transform.position = Vector3.MoveTowards(transform.position, _targetPosition, speed * Time.deltaTime);
                 if (Vector3.Distance(transform.position, _targetPosition) < 0.01f)
                 {
                     isMoving = false;
@@ -71,17 +57,10 @@ namespace FanExperiencePrototypes
         public void MoveToPosition(Vector3 boardBasePosition, int columnIndex)
         {
             _currentIndex = columnIndex;
-            Vector3 lateral = (_isLeft ? Vector3.left : Vector3.right) * _lateralSeparation;
+            float lateralSeparation = GameManager.Instance != null ? GameManager.Instance.LateralSeparation : 0.6f;
+            Vector3 lateral = (_isLeft ? Vector3.left : Vector3.right) * lateralSeparation;
             _targetPosition = boardBasePosition + lateral;
             isMoving = true;
-        }
-
-        // Backwards-compatible helper (keeps API if something still calls MoveToIndex)
-        public void MoveToIndex(int idx)
-        {
-            // deprecated: no internal board; caller should provide base position via MoveToPosition
-            _currentIndex = idx;
-            // keep current target if not set; caller should call MoveToPosition for proper placement
         }
 
         // Check side using board column count supplied by caller (Board owns columns)
@@ -101,25 +80,32 @@ namespace FanExperiencePrototypes
 
         private IEnumerator RoundFeedbackCoroutine(bool won)
         {
+            // read shared feedback settings (use reasonable fallbacks if Instance missing)
+            var gm = GameManager.Instance;
+            float duration = gm != null ? gm.FeedbackDuration : 0.25f;
+            float nudge = gm != null ? gm.FeedbackNudge : 0.22f;
+            float scaleFactor = gm != null ? gm.FeedbackScale : 1.12f;
+            Color winTint = gm != null ? gm.WinTint : Color.white;
+            Color loseTint = gm != null ? gm.LoseTint : new Color(0.8f, 0.6f, 0.6f);
+
             Vector3 origPos = transform.position;
             Vector3 nudgeDir;
-            // if left-side fighter, a win nudges rightwards (toward opponent); otherwise leftwards
             nudgeDir = (_isLeft) ? Vector3.right : Vector3.left;
             float dirSign = won ? 1f : -1f;
-            Vector3 targetPos = origPos + nudgeDir * _feedbackNudge * dirSign;
+            Vector3 targetPos = origPos + nudgeDir * nudge * dirSign;
 
             Vector3 origScale = transform.localScale;
-            Vector3 targetScale = origScale * (won ? _feedbackScale : (1f / _feedbackScale));
+            Vector3 targetScale = origScale * (won ? scaleFactor : (1f / scaleFactor));
 
             // tint sprite if available
             Color origColor = _spriteRenderer ? _spriteRenderer.color : Color.white;
-            Color targetTint = won ? _winTint : _loseTint;
+            Color targetTint = won ? winTint : loseTint;
 
             float t = 0f;
-            while (t < _feedbackDuration)
+            while (t < duration)
             {
                 t += Time.deltaTime;
-                float p = Mathf.SmoothStep(0f, 1f, t / _feedbackDuration);
+                float p = Mathf.SmoothStep(0f, 1f, t / duration);
                 transform.position = Vector3.Lerp(origPos, targetPos, p);
                 transform.localScale = Vector3.Lerp(origScale, targetScale, p);
                 if (_spriteRenderer)
@@ -131,10 +117,10 @@ namespace FanExperiencePrototypes
 
             // return
             t = 0f;
-            while (t < _feedbackDuration)
+            while (t < duration)
             {
                 t += Time.deltaTime;
-                float p = Mathf.SmoothStep(0f, 1f, t / _feedbackDuration);
+                float p = Mathf.SmoothStep(0f, 1f, t / duration);
                 transform.position = Vector3.Lerp(targetPos, origPos, p);
                 transform.localScale = Vector3.Lerp(targetScale, origScale, p);
                 if (_spriteRenderer)
