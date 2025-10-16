@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Sumoball
@@ -122,6 +123,20 @@ namespace Sumoball
 
             _gameRunning = true;
             StartCoroutine(GameLoop());
+        }
+
+        private void Update()
+        {
+            // Debug reset game with R key
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
         }
 
         IEnumerator GameLoop()

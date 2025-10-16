@@ -239,16 +239,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _combatantName: RRRRR
-  _pushSpeed: 4
   _currentIndex: 0
   _isLeft: 0
-  _lateralSeparation: 0.6
-  _feedbackDuration: 0.25
-  _feedbackNudge: 0.22
-  _feedbackScale: 1
-  _winTint: {r: 1, g: 1, b: 1, a: 1}
-  _loseTint: {r: 0.8, g: 0.6, b: 0.6, a: 1}
-  _neutralTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &216469358
 Transform:
   m_ObjectHideFlags: 0
@@ -984,16 +976,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _combatantName: LLLLL
-  _pushSpeed: 4
   _currentIndex: 0
   _isLeft: 1
-  _lateralSeparation: 0.6
-  _feedbackDuration: 0.25
-  _feedbackNudge: 0.22
-  _feedbackScale: 1
-  _winTint: {r: 1, g: 1, b: 1, a: 1}
-  _loseTint: {r: 0.8, g: 0.6, b: 0.6, a: 1}
-  _neutralTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1556537000
 Transform:
   m_ObjectHideFlags: 0
@@ -1224,6 +1208,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26048be87b365be4ebbd879a8f3bfbf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _pushSpeed: 10
+  _lateralSeparation: 0.6
+  _feedbackDuration: 0.25
+  _feedbackNudge: 0.22
+  _feedbackScale: 1.12
+  _winTint: {r: 1, g: 1, b: 1, a: 1}
+  _loseTint: {r: 0.8, g: 0.6, b: 0.6, a: 1}
+  _neutralTint: {r: 1, g: 1, b: 1, a: 1}
   _leftCombatant: {fileID: 1556536999}
   _rightCombatant: {fileID: 216469357}
   _leftAI: {fileID: 1556536998}
@@ -1231,8 +1223,8 @@ MonoBehaviour:
   _ui: {fileID: 316784517}
   _board: {fileID: 2140114424}
   _bestOf: 3
-  _roundDelay: 1
-  _countdownStart: 3
+  _roundDelay: 0.2
+  _countdownStart: 1
 --- !u!4 &1846495892
 Transform:
   m_ObjectHideFlags: 0
@@ -1412,10 +1404,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _columns: 5
-  _spanMultiplier: 3
+  _spanMultiplier: 6
   _markerSprite: {fileID: -2413806693520163455, guid: f6df18aaee8a7c64fbf835e2fec329c7, type: 3}
-  _markerColor: {r: 0.6571635, g: 0.34247053, b: 0.9811321, a: 0.9}
+  _markerColor: {r: 0.79276145, g: 0.58805025, b: 1, a: 0.9}
   _markerSize: 0.25
+  _yOffset: 1
 --- !u!4 &2140114425
 Transform:
   m_ObjectHideFlags: 0
