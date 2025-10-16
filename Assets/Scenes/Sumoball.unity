@@ -243,6 +243,12 @@ MonoBehaviour:
   _currentIndex: 0
   _isLeft: 0
   _lateralSeparation: 0.6
+  _feedbackDuration: 0.25
+  _feedbackNudge: 0.22
+  _feedbackScale: 1
+  _winTint: {r: 1, g: 1, b: 1, a: 1}
+  _loseTint: {r: 0.8, g: 0.6, b: 0.6, a: 1}
+  _neutralTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &216469358
 Transform:
   m_ObjectHideFlags: 0
@@ -300,7 +306,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 2c60d10ccaae9ca48966f4f5a0f02e6f, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9559748, g: 0.45393762, b: 0.45393762, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -346,6 +352,16 @@ MonoBehaviour:
   _rightMoveText: {fileID: 2065247324}
   _countdownText: {fileID: 624863716}
   _statusText: {fileID: 1390894718}
+  _leftColor: {r: 0.4, g: 0.8, b: 1, a: 1}
+  _rightColor: {r: 1, g: 0.6, b: 0.6, a: 1}
+  _winColor: {r: 0, g: 1, b: 0, a: 1}
+  _tieColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _flashDuration: 0.6
+  _backgroundPanel: {fileID: 0}
+  _resultIcon: {fileID: 0}
+  _winSprite: {fileID: 0}
+  _loseSprite: {fileID: 0}
+  _tieSprite: {fileID: 0}
 --- !u!114 &316784518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -972,6 +988,12 @@ MonoBehaviour:
   _currentIndex: 0
   _isLeft: 1
   _lateralSeparation: 0.6
+  _feedbackDuration: 0.25
+  _feedbackNudge: 0.22
+  _feedbackScale: 1
+  _winTint: {r: 1, g: 1, b: 1, a: 1}
+  _loseTint: {r: 0.8, g: 0.6, b: 0.6, a: 1}
+  _neutralTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1556537000
 Transform:
   m_ObjectHideFlags: 0
@@ -1029,7 +1051,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 07d2cae3e6bf36543bf00ba74355e03e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.31108338, g: 0.87124175, b: 0.9245283, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1390,7 +1412,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _columns: 5
-  _spanMultiplier: 1
+  _spanMultiplier: 3
+  _markerSprite: {fileID: -2413806693520163455, guid: f6df18aaee8a7c64fbf835e2fec329c7, type: 3}
+  _markerColor: {r: 0.6571635, g: 0.34247053, b: 0.9811321, a: 0.9}
+  _markerSize: 0.25
 --- !u!4 &2140114425
 Transform:
   m_ObjectHideFlags: 0
@@ -1400,7 +1425,7 @@ Transform:
   m_GameObject: {fileID: 2140114423}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.251433, y: 0.2907553, z: 0.027410902}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

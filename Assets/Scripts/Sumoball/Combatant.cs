@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace FanExperiencePrototypes
@@ -25,8 +26,20 @@ namespace FanExperiencePrototypes
         [SerializeField] private float _lateralSeparation = 0.6f;
         public float LateralSeparation => _lateralSeparation;
 
+        // Feedback settings
+        [Header("Round Feedback")]
+        [SerializeField] private float _feedbackDuration = 0.25f;
+        [SerializeField] private float _feedbackNudge = 0.22f;
+        [SerializeField] private float _feedbackScale = 1.12f;
+
+        [Header("Feedback Tints")]
+        [SerializeField] private Color _winTint = Color.white;
+        [SerializeField] private Color _loseTint = new Color(0.8f, 0.6f, 0.6f);
+        [SerializeField] private Color _neutralTint = Color.white;
+
         private Vector3 _targetPosition;
         private bool isMoving;
+        private SpriteRenderer _spriteRenderer;
 
         void Start()
         {
@@ -36,6 +49,9 @@ namespace FanExperiencePrototypes
             // Initialize transform to current position (will be moved by GameManager when board is created)
             _targetPosition = transform.position;
             transform.position = _targetPosition;
+
+            // cache optional sprite renderer for tint feedback
+            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
         void Update()
@@ -73,6 +89,64 @@ namespace FanExperiencePrototypes
         {
             if (boardColumns <= 0) return false;
             return _currentIndex == 0 || _currentIndex == boardColumns - 1;
+        }
+
+        // Play a brief visual feedback for a round: winner gets a small scale-up + nudge toward opponent,
+        // loser gets a slight recoil. Call from GameManager after round resolution.
+        public void PlayRoundFeedback(bool won)
+        {
+            StopAllCoroutines();
+            StartCoroutine(RoundFeedbackCoroutine(won));
+        }
+
+        private IEnumerator RoundFeedbackCoroutine(bool won)
+        {
+            Vector3 origPos = transform.position;
+            Vector3 nudgeDir;
+            // if left-side fighter, a win nudges rightwards (toward opponent); otherwise leftwards
+            nudgeDir = (_isLeft) ? Vector3.right : Vector3.left;
+            float dirSign = won ? 1f : -1f;
+            Vector3 targetPos = origPos + nudgeDir * _feedbackNudge * dirSign;
+
+            Vector3 origScale = transform.localScale;
+            Vector3 targetScale = origScale * (won ? _feedbackScale : (1f / _feedbackScale));
+
+            // tint sprite if available
+            Color origColor = _spriteRenderer ? _spriteRenderer.color : Color.white;
+            Color targetTint = won ? _winTint : _loseTint;
+
+            float t = 0f;
+            while (t < _feedbackDuration)
+            {
+                t += Time.deltaTime;
+                float p = Mathf.SmoothStep(0f, 1f, t / _feedbackDuration);
+                transform.position = Vector3.Lerp(origPos, targetPos, p);
+                transform.localScale = Vector3.Lerp(origScale, targetScale, p);
+                if (_spriteRenderer)
+                {
+                    _spriteRenderer.color = Color.Lerp(origColor, targetTint, p);
+                }
+                yield return null;
+            }
+
+            // return
+            t = 0f;
+            while (t < _feedbackDuration)
+            {
+                t += Time.deltaTime;
+                float p = Mathf.SmoothStep(0f, 1f, t / _feedbackDuration);
+                transform.position = Vector3.Lerp(targetPos, origPos, p);
+                transform.localScale = Vector3.Lerp(targetScale, origScale, p);
+                if (_spriteRenderer)
+                {
+                    _spriteRenderer.color = Color.Lerp(targetTint, origColor, p);
+                }
+                yield return null;
+            }
+
+            transform.position = origPos;
+            transform.localScale = origScale;
+            if (_spriteRenderer) _spriteRenderer.color = origColor;
         }
     }
 }

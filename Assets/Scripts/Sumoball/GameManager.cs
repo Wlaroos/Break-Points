@@ -105,22 +105,45 @@ namespace FanExperiencePrototypes
                 _ui?.ShowMoves(leftMove, rightMove);
 
                 // Resolve single RPS round (affects board and round score)
+                int result = 0; // 1 left wins, -1 right wins, 0 tie
                 if (leftMove == rightMove)
                 {
+                    result = 0;
                     _ui?.ShowStatus("Tie");
                     // no board move on tie
                 }
                 else if (leftMove.Beats(rightMove))
                 {
+                    result = 1;
                     _ui?.ShowStatus($"{_leftCombatant.CombatantName} wins round");
                     _roundScoreLeft++;
                     _boardIndex = Mathf.Min(_boardIndex + 1, _board.Positions.Length - 1);
                 }
                 else
                 {
+                    result = -1;
                     _ui?.ShowStatus($"{_rightCombatant.CombatantName} wins round");
                     _roundScoreRight++;
                     _boardIndex = Mathf.Max(_boardIndex - 1, 0);
+                }
+
+                // Visual feedback: highlight UI and nudge/scale combatants
+                _ui?.HighlightRoundResult(result);
+                if (result == 1)
+                {
+                    _leftCombatant.PlayRoundFeedback(true);
+                    _rightCombatant.PlayRoundFeedback(false);
+                }
+                else if (result == -1)
+                {
+                    _leftCombatant.PlayRoundFeedback(false);
+                    _rightCombatant.PlayRoundFeedback(true);
+                }
+                else
+                {
+                    // tie: small neutral feedback for both (use false to give slight recoil)
+                    _leftCombatant.PlayRoundFeedback(false);
+                    _rightCombatant.PlayRoundFeedback(false);
                 }
 
                 // Update score display (round + match)
