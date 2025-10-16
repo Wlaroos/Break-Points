@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace FanExperiencePrototypes
+namespace Sumoball
 {
     public class GameUI : MonoBehaviour
     {

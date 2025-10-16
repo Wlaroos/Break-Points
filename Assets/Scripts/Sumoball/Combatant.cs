@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace FanExperiencePrototypes
+namespace Sumoball
 {
     [RequireComponent(typeof(Transform))]
     public class Combatant : MonoBehaviour

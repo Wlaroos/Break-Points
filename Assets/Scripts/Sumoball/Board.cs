@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FanExperiencePrototypes
+namespace Sumoball
 {
     public class Board : MonoBehaviour
     {
