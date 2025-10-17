@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic; // added for List<T>
 using UnityEngine;
 
 namespace Sumoball
@@ -10,7 +11,7 @@ namespace Sumoball
         public string CombatantName { get { return _combatantName; } }
 
         // per-combatant state
-        [SerializeField] private int _currentIndex = 0; // will be set by GameManager to center
+        private int _currentIndex = 0; // will be set by GameManager to center
         public int CurrentIndex
         {
             get { return _currentIndex; }
@@ -21,9 +22,37 @@ namespace Sumoball
         [SerializeField] private bool _isLeft = true;
         public bool IsLeft => _isLeft;
 
+        // Edge visit tracking + per-distribution visit threshold (editable in inspector).
+        [System.Serializable]
+        private class EdgeDistributionEntry
+        {
+            [SerializeField, Tooltip("Name of the MoveDistribution in PlayerAI to apply (case-sensitive).")]
+            private string distributionName = "";
+            public string Name => distributionName;
+
+            [SerializeField, Min(1), Tooltip("Number of edge visits required before this distribution becomes active.")]
+            private int visitsRequired = 1;
+            public int VisitsRequired => visitsRequired;
+        }
+
+        private int _edgeVisits = 0;
+        // Expose number of times this combatant has visited its edge (read-only)
+        public int EdgeVisits => _edgeVisits;
+        // Reset edge visit count (call when this combatant loses a match)
+        [Header("Edge Visits and AI Distribution")]
+        [Tooltip("Configure which PlayerAI distribution to apply and how many edge visits are required before applying it.")]
+        [SerializeField] private List<EdgeDistributionEntry> _edgeDistributions = new List<EdgeDistributionEntry>();
+
         private Vector3 _targetPosition;
         private bool isMoving;
         private SpriteRenderer _spriteRenderer;
+
+        // PlayerAI lives on the same GameObject — cache it.
+        private PlayerAI _playerAI;
+
+        // Public state other systems (GameManager) can wait on
+        public bool IsMoving { get; private set; }
+        private Coroutine _moveCoroutine;
 
         void Start()
         {
@@ -36,6 +65,9 @@ namespace Sumoball
 
             // cache optional sprite renderer for tint feedback
             _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+            // cache PlayerAI (assumed present on same GameObject)
+            _playerAI = GetComponent<PlayerAI>();
         }
 
         void Update()
@@ -63,10 +95,6 @@ namespace Sumoball
             isMoving = true;
         }
 
-        // Public state other systems (GameManager) can wait on
-        public bool IsMoving { get; private set; }
-        private Coroutine _moveCoroutine;
-
         // Example coroutine that moves this transform smoothly to the computed position.
         // Replace lateral offset logic with whatever your existing MoveToPosition used.
         public IEnumerator MoveToPositionCoroutine(Vector3 basePosition, int columnIndex)
@@ -79,6 +107,10 @@ namespace Sumoball
             }
 
             IsMoving = true;
+            // remember previous index so we don't count an "arrival" if we were already on that edge
+            int prevIndex = _currentIndex;
+            // ensure current index is set for this move
+            _currentIndex = columnIndex;
             // compute target using GameManager.LateralSeparation etc.
             Vector3 target = basePosition + (_isLeft ? Vector3.left : Vector3.right) * (GameManager.Instance != null ? GameManager.Instance.LateralSeparation : 0.6f);
             float tolerance = 0.01f;
@@ -91,22 +123,47 @@ namespace Sumoball
             }
 
             transform.position = target;
+            // Arrival: check if this column is the "one-from-side" edge and increment visits if so.
+            int boardCols = GameManager.Instance != null ? GameManager.Instance.BoardColumns : 0;
+            if (boardCols >= 3)
+            {
+                int edgeIndex = _isLeft ? 1 : (boardCols - 2);
+                // Only count an edge "visit" if we arrived at the edge from a different column.
+                if (_currentIndex == edgeIndex && prevIndex != edgeIndex)
+                {
+                    _edgeVisits++;
+                    ApplyDistributionForEdgeVisits();
+                }
+            }
             IsMoving = false;
             _moveCoroutine = null;
         }
 
-        // Optionally keep old MoveToPosition wrapper for compatibility (if you had one),
-        // but prefer using the coroutine from GameManager.
-        // public void MoveToPosition(Vector3 basePosition, int columnIndex)
-        // {
-        //     // if you want to preserve existing instantaneous or internally-handled movement,
-        //     // keep your old implementation here. Otherwise prefer MoveToPositionCoroutine.
-        //     _currentIndex = columnIndex;
-        //     float lateralSeparation = GameManager.Instance != null ? GameManager.Instance.LateralSeparation : 0.6f;
-        //     Vector3 lateral = (_isLeft ? Vector3.left : Vector3.right) * lateralSeparation;
-        //     _targetPosition = basePosition + lateral;
-        //     isMoving = true;
-        // }
+        // Try to pick a PlayerAI distribution based on the number of edge visits.
+        private void ApplyDistributionForEdgeVisits()
+        {
+            if (_edgeDistributions == null || _edgeDistributions.Count == 0) return;
+
+            // Find the distribution with the highest VisitsRequired that is <= current visits.
+            EdgeDistributionEntry best = null;
+            foreach (var e in _edgeDistributions)
+            {
+                if (e == null) continue;
+                if (e.VisitsRequired <= _edgeVisits)
+                {
+                    if (best == null || e.VisitsRequired > best.VisitsRequired) best = e;
+                }
+            }
+            if (best == null) return;
+            string distName = best.Name;
+            if (string.IsNullOrEmpty(distName)) return;
+
+            // Use the PlayerAI on this GameObject (assumed present)
+            if (_playerAI != null)
+            {
+                _playerAI.SetDistribution(distName);
+            }
+        }
 
         // Check side using board column count supplied by caller (Board owns columns)
         public bool IsOnSide(int boardColumns)
@@ -178,6 +235,11 @@ namespace Sumoball
             transform.position = origPos;
             transform.localScale = origScale;
             if (_spriteRenderer) _spriteRenderer.color = origColor;
+        }
+
+        public void ResetEdgeVisits()
+        {
+            _edgeVisits = 0;
         }
     }
 }

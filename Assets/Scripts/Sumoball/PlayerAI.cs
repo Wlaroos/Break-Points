@@ -95,6 +95,15 @@ namespace Sumoball
             return arr;
         }
 
+        // Return the currently selected distribution name (or empty if unavailable)
+        public string GetCurrentDistributionName()
+        {
+            if (distributions == null || distributions.Count == 0) return string.Empty;
+            int idx = Mathf.Clamp(currentDistributionIndex, 0, distributions.Count - 1);
+            var d = distributions[idx];
+            return d != null ? d.Name : string.Empty;
+        }
+
         // Optional: legacy cycling methods kept for convenience
         public void NextDistribution()
         {

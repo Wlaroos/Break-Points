@@ -72,6 +72,11 @@ namespace Sumoball
             Instance = this;
         }
 
+        // Expose board/player AI info for other components (Combatant uses this)
+        public int BoardColumns => (_board != null && _board.Positions != null) ? _board.Positions.Length : 0;
+        public PlayerAI LeftAI => _leftAI;
+        public PlayerAI RightAI => _rightAI;
+
         // Make Start a coroutine so we can wait for the initial positioning coroutines to finish
         IEnumerator Start()
         {
@@ -155,6 +160,12 @@ namespace Sumoball
             {
                 // Show current scores each loop
                 _ui?.ShowScores(_roundScoreLeft, _roundScoreRight, _matchWinsLeft, _matchWinsRight);
+                // Update edge visits + current distribution names in the UI
+                string leftDist = _leftAI != null ? _leftAI.GetCurrentDistributionName() : "";
+                string rightDist = _rightAI != null ? _rightAI.GetCurrentDistributionName() : "";
+                int leftVisits = _leftCombatant != null ? _leftCombatant.EdgeVisits : 0;
+                int rightVisits = _rightCombatant != null ? _rightCombatant.EdgeVisits : 0;
+                _ui?.ShowEdgeInfo(leftVisits, leftDist, rightVisits, rightDist);
 
                 // Countdown
                 for (int i = _countdownStart; i >= 0; i--)
@@ -253,6 +264,8 @@ namespace Sumoball
                     // right-most wall reached -> right knocked out -> left wins match
                     _ui?.ShowStatus($"{_leftCombatant.CombatantName} knocked out. {_rightCombatant.CombatantName} wins match!");
                     _matchWinsLeft++;
+                    // reset edge visits for the loser (right)
+                    _rightCombatant?.ResetEdgeVisits();
                     matchEndedByKnockout = true;
                 }
                 else if (_boardIndex == 0)
@@ -260,6 +273,8 @@ namespace Sumoball
                     // left-most wall reached -> left knocked out -> right wins match
                     _ui?.ShowStatus($"{_rightCombatant.CombatantName} knocked out. {_leftCombatant.CombatantName} wins match!");
                     _matchWinsRight++;
+                    // reset edge visits for the loser (left)
+                    _leftCombatant?.ResetEdgeVisits();
                     matchEndedByKnockout = true;
                 }
 
