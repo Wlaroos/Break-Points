@@ -354,7 +354,7 @@ MonoBehaviour:
   _rightColor: {r: 1, g: 0.6, b: 0.6, a: 1}
   _winColor: {r: 0, g: 1, b: 0, a: 1}
   _tieColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  _flashDuration: 0.6
+  _flashDuration: 0.1
 --- !u!114 &316784518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -833,7 +833,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -450, y: 309.8}
+  m_AnchoredPosition: {x: -450, y: 275.79996}
   m_SizeDelta: {x: 350, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &921304347
@@ -967,7 +967,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -450, y: 371.1}
+  m_AnchoredPosition: {x: -450, y: 337.1}
   m_SizeDelta: {x: 350, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1089714233
@@ -1101,7 +1101,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -450, y: 280.69998}
+  m_AnchoredPosition: {x: -450, y: 246.69995}
   m_SizeDelta: {x: 350, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1369129465
@@ -1649,8 +1649,8 @@ MonoBehaviour:
   _ui: {fileID: 316784517}
   _board: {fileID: 2140114424}
   _bestOf: 3
-  _roundDelay: 0.2
-  _countdownStart: 1
+  _roundDelay: 0.1
+  _countdownStart: 3
 --- !u!4 &1846495892
 Transform:
   m_ObjectHideFlags: 0
@@ -1775,7 +1775,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -450, y: 339.4}
+  m_AnchoredPosition: {x: -450, y: 305.39996}
   m_SizeDelta: {x: 350, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2047271388
@@ -2038,12 +2038,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 192a18bcd45806545b626f0ca5c4691b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _columns: 5
-  _spanMultiplier: 7
+  _columns: 7
+  _spanMultiplier: 4
   _markerSprite: {fileID: -2413806693520163455, guid: f6df18aaee8a7c64fbf835e2fec329c7, type: 3}
   _markerColor: {r: 0.79276145, g: 0.58805025, b: 1, a: 0.9}
   _markerSize: 0.25
-  _yOffset: 1
+  _yOffset: -1
 --- !u!4 &2140114425
 Transform:
   m_ObjectHideFlags: 0

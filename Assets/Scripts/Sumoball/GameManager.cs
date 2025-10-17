@@ -265,7 +265,6 @@ namespace Sumoball
                     _ui?.ShowStatus($"{_leftCombatant.CombatantName} knocked out. {_rightCombatant.CombatantName} wins match!");
                     _matchWinsLeft++;
                     // reset edge visits for the loser (right)
-                    _rightCombatant?.ResetEdgeVisits();
                     matchEndedByKnockout = true;
                 }
                 else if (_boardIndex == 0)
@@ -274,7 +273,6 @@ namespace Sumoball
                     _ui?.ShowStatus($"{_rightCombatant.CombatantName} knocked out. {_leftCombatant.CombatantName} wins match!");
                     _matchWinsRight++;
                     // reset edge visits for the loser (left)
-                    _leftCombatant?.ResetEdgeVisits();
                     matchEndedByKnockout = true;
                 }
 
@@ -314,9 +312,15 @@ namespace Sumoball
                         tt += Time.deltaTime;
                         yield return null;
                     }
+
+                    // Reset edge visit counts for both combatants
+                    _leftCombatant?.ResetEdgeVisits();
+                    _rightCombatant?.ResetEdgeVisits();
+
                     // small buffer
                     yield return new WaitForSeconds(0.1f);
                     continue; // next match continues
+                    
                 }
 
                 // If no knockout, matches continue; series only tracked by match wins
