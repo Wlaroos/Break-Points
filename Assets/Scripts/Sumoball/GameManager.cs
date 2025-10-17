@@ -47,6 +47,7 @@ namespace Sumoball
         [Min(1), SerializeField] private int _bestOf = 3; // best of N matches (will be forced odd)
         [SerializeField] private float _roundDelay = 1f;
         [SerializeField] private int _countdownStart = 3;
+        [SerializeField] private float _gameSpeed = 1f; // multiplier for Time.timeScale
 
         private bool _gameRunning = false;
         private int _boardIndex = 0; // center index set at Start
@@ -137,6 +138,10 @@ namespace Sumoball
             _matchWinsRight = 0;
 
             _gameRunning = true;
+
+            // Set game speed
+            Time.timeScale = _gameSpeed;
+
             StartCoroutine(GameLoop());
         }
 

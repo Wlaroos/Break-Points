@@ -1332,7 +1332,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -200}
+  m_AnchoredPosition: {x: 0, y: -275}
   m_SizeDelta: {x: 750, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1556536997
@@ -1651,6 +1651,7 @@ MonoBehaviour:
   _bestOf: 3
   _roundDelay: 0.1
   _countdownStart: 3
+  _gameSpeed: 1
 --- !u!4 &1846495892
 Transform:
   m_ObjectHideFlags: 0
@@ -2038,8 +2039,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 192a18bcd45806545b626f0ca5c4691b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _columns: 7
-  _spanMultiplier: 4
+  _columns: 5
+  _spanMultiplier: 7
   _markerSprite: {fileID: -2413806693520163455, guid: f6df18aaee8a7c64fbf835e2fec329c7, type: 3}
   _markerColor: {r: 0.79276145, g: 0.58805025, b: 1, a: 0.9}
   _markerSize: 0.25
