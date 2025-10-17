@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "FanExperiencePrototypes.sln"
+    "dotnet.defaultSolution": "Break-Points.sln"
 }
