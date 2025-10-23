@@ -97,3 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5369cad99f0d7ec48a34aa8b068e6cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveChance: 0.5
+  _waitChance: 0.5
+  _moveDistance: 1
+  _displayColor: {r: 0.5529412, g: 0.95294124, b: 0.30980393, a: 1}
