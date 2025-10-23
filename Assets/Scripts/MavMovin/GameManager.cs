@@ -13,28 +13,27 @@ namespace MavMovin
         [SerializeField] private Horse _horse03;
         [SerializeField] private Horse _horse04;
 
-        [Header("Track Settings")]
-        [SerializeField] private Transform _trackSectionPrefab;
-        [SerializeField] private int _trackLength = 10;
-        [SerializeField] private float _trackVerticalSpacing = 2.5f;
-
+        // UI: canvas manager to display messages & statuses
+        [Header("UI")]
+        [SerializeField] private GameCanvasManager _canvasManager;
+        
         [Header("Powerup Settings")]
         [SerializeField] private Powerup _powerupPrefab;
-        // duration a powerup boost lasts (seconds)
-        [SerializeField] private float _powerupDuration = 3f;
-
-        [Header("Spawn Settings")]
-        [SerializeField] private Vector3 _spawnOrigin = Vector3.zero;
-        [SerializeField] private Color _horseGizmoColor = Color.cyan;
-        [SerializeField] private Color _trackGizmoColor = Color.yellow;
-        [SerializeField] private float _horseGizmoRadius = 0.25f;
+        // duration a powerup boost lasts in number of track spaces moved
+        [SerializeField] private int _powerupMoveDuration = 3;
 
         [Header("Game Settings")]
         [SerializeField] private float _tickTimeSeconds = 1f;
 
-        // UI: canvas manager to display messages & statuses
-        [Header("UI")]
-        [SerializeField] private GameCanvasManager _canvasManager;
+        [Header("Track Settings")]
+        [SerializeField] private Transform _trackSectionPrefab;
+        [SerializeField] private int _trackLength = 10;
+        [SerializeField] private float _trackHorizontalSpacing = 1.5f;
+        [SerializeField] private float _trackVerticalSpacing = 2.5f;
+        [SerializeField] private Vector3 _spawnOrigin = Vector3.zero;
+        private Color _horseGizmoColor = Color.cyan;
+        private Color _trackGizmoColor = Color.yellow;
+        private float _horseGizmoRadius = 0.25f;
 
         // runtime
         private List<Horse> _horses = new List<Horse>();
@@ -130,11 +129,17 @@ namespace MavMovin
         {
             List<Transform> sections = new List<Transform>();
 
-            float trackWidth = 1f;
+            // Use the configured horizontal spacing as the track section width.
+            float trackWidth = _trackHorizontalSpacing;
             if (_trackSectionPrefab != null)
             {
                 var sr = _trackSectionPrefab.GetComponent<SpriteRenderer>();
-                if (sr != null) trackWidth = sr.bounds.size.x;
+                if (sr != null)
+                {
+                    // If spacing is invalid, fall back to prefab bounds width
+                    if (_trackHorizontalSpacing <= 0f)
+                        trackWidth = sr.bounds.size.x;
+                }
             }
 
             for (int i = 0; i < _trackLength; i++)
@@ -144,6 +149,27 @@ namespace MavMovin
                 if (_trackSectionPrefab != null)
                 {
                     Transform t = Instantiate(_trackSectionPrefab, spawnPosition, Quaternion.identity);
+
+                    // make the instantiated track section a child of this manager for hierarchy organization
+                    // keep world position so placement doesn't change
+                    t.SetParent(this.transform, true);
+
+                    // rename to a consistent track name (optional)
+                    t.name = $"Track_{sections.Count}";
+
+                    // adjust sliced/tiled sprite width to match spacing so visuals line up with placement
+                    var srInst = t.GetComponent<SpriteRenderer>();
+                    if (srInst != null)
+                    {
+                        // determine a sensible height (use current bounds if available)
+                        float height = (srInst.bounds.size.y > 0f) ? srInst.bounds.size.y : 1f;
+
+                        // ensure drawMode supports sizing. Sliced (or Tiled) allows setting size.
+                        // Note: Sliced requires a sprite with borders; Tiled may be used instead depending on art.
+                        srInst.drawMode = SpriteDrawMode.Sliced;
+                        srInst.size = new Vector2(trackWidth, height);
+                    }
+
                     inst = t;
                 }
                 // If no prefab provided, create an empty transform placeholder
@@ -151,6 +177,10 @@ namespace MavMovin
                 {
                     GameObject go = new GameObject($"Track_{sections.Count}");
                     go.transform.position = spawnPosition;
+
+                    // parent placeholder to this manager as well
+                    go.transform.SetParent(this.transform, true);
+
                     inst = go.transform;
                 }
 
@@ -183,6 +213,10 @@ namespace MavMovin
             var wait = new WaitForSeconds(_tickTimeSeconds);
             while (true)
             {
+                // trigger pulse visual each tick
+                if (_canvasManager != null)
+                    _canvasManager.TriggerTickPulse(_tickTimeSeconds);
+
                 for (int lane = 0; lane < _horses.Count; lane++)
                 {
                     Horse horse = _horses[lane];
@@ -194,10 +228,15 @@ namespace MavMovin
                     if (Random.value <= horse.MoveChance)
                     {
                         int target = Mathf.Min(currentIndex + horse.MoveDistance, (trackCount > 0) ? trackCount - 1 : currentIndex);
+                        int spacesMoved = Mathf.Abs(target - currentIndex);
                         _horseTrackIndices[lane] = target;
 
                         if (trackCount > 0)
                             horse.TeleportTo(_trackLanes[lane][target].position);
+
+                        // notify horse that it moved so move-based boosts decrement
+                        if (spacesMoved > 0)
+                            horse.NotifyMoved(spacesMoved);
 
                         // check powerup pickup
                         if (_lanePowerups[lane] != null && _lanePowerupIndices[lane] == target)
@@ -205,7 +244,7 @@ namespace MavMovin
                             Powerup pu = _lanePowerups[lane];
                             if (pu != null)
                             {
-                                horse.ApplyMovePercentBoost(pu.MovePercentBoost, _powerupDuration);
+                                horse.ApplyMovePercentBoost(pu.MovePercentBoost, _powerupMoveDuration);
                                 Destroy(pu.gameObject);
                                 _lanePowerups[lane] = null;
                                 _lanePowerupIndices[lane] = -1;
@@ -236,11 +275,11 @@ namespace MavMovin
             Gizmos.color = Color.white;
             Gizmos.DrawWireSphere(_spawnOrigin, _horseGizmoRadius * 0.75f);
 
-            float trackWidth = 1f;
+            float trackWidth = (_trackHorizontalSpacing > 0f) ? _trackHorizontalSpacing : 1f;
             if (_trackSectionPrefab != null)
             {
                 var sr = _trackSectionPrefab.GetComponent<SpriteRenderer>();
-                if (sr != null) trackWidth = sr.bounds.size.x;
+                if (sr != null && _trackHorizontalSpacing <= 0f) trackWidth = sr.bounds.size.x;
             }
 
             // draw horses

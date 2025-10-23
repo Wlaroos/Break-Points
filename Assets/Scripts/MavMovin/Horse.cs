@@ -18,7 +18,8 @@ namespace MavMovin
         public int MoveDistance => _moveDistance;
 
         private float _baseMoveChance;
-        private Coroutine _boostRoutine;
+        // remaining number of track spaces the boost is still active for
+        private int _boostRemainingMoves = 0;
 
         [SerializeField] private Color _displayColor;
         public Color DisplayColor => _displayColor;
@@ -54,20 +55,27 @@ namespace MavMovin
             transform.position = worldPos;
         }
 
-        // Apply a percentage boost to move chance for a duration (percent is e.g. 0.2f to add 20%)
-        public void ApplyMovePercentBoost(float percent, float duration = 3f)
+        // Apply a percentage boost to move chance for a number of track moves (moveCount).
+        // percent is e.g. 0.2f to add 20%. moveCount is how many actual moves this boost should remain active.
+        public void ApplyMovePercentBoost(float percent, int moveCount)
         {
-            if (_boostRoutine != null)
-                StopCoroutine(_boostRoutine);
-            _boostRoutine = StartCoroutine(ApplyBoostRoutine(percent, duration));
+            if (moveCount <= 0) return;
+
+            _currentMoveChance = Mathf.Clamp01(_currentMoveChance + percent);
+            _boostRemainingMoves = moveCount;
         }
 
-        private IEnumerator ApplyBoostRoutine(float percent, float duration)
+        // Call this each time the horse actually moves forward one or more track spaces.
+        // If a boost is active it will decrement the remaining move count and clear the boost when used up.
+        public void NotifyMoved(int spacesMoved = 1)
         {
-            _currentMoveChance = Mathf.Clamp01(_currentMoveChance + percent);
-            yield return new WaitForSeconds(duration);
-            _currentMoveChance = _baseMoveChance;
-            _boostRoutine = null;
+            if (_boostRemainingMoves <= 0) return;
+
+            _boostRemainingMoves = Mathf.Max(0, _boostRemainingMoves - spacesMoved);
+            if (_boostRemainingMoves == 0)
+            {
+                _currentMoveChance = _baseMoveChance;
+            }
         }
     }
 }
