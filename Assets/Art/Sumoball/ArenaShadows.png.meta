@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3a1c25121e20784428c05d1e736b0f7a
+guid: f56f659db42496a4cac2c3d38e91ee66
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,49 +95,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Sumos_0
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 1
-        width: 28
-        height: 26
-      alignment: 9
-      pivot: {x: 0.26923078, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 600b8a673405d9a4792013e870a3248c
-      internalID: -595333215
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Sumos_1
-      rect:
-        serializedVersion: 2
-        x: 31
-        y: 1
-        width: 28
-        height: 26
-      alignment: 9
-      pivot: {x: 0.7307693, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e916827abbf00a34da84529c2464d9dc
-      internalID: 1042940774
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -148,9 +106,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Sumos_0: -595333215
-      Sumos_1: 1042940774
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
