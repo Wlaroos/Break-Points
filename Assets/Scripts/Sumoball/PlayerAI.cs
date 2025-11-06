@@ -26,9 +26,9 @@ namespace Sumoball
         public RPSMove Sample(System.Random rng)
         {
             float r = (float)rng.NextDouble();
-            if (r < _rock) return RPSMove.Rock;
-            if (r < _rock + _paper) return RPSMove.Paper;
-            if (r < _rock + _paper + _scissors) return RPSMove.Scissors;
+            if (r < _rock) return RPSMove.Shove;
+            if (r < _rock + _paper) return RPSMove.Slap;
+            if (r < _rock + _paper + _scissors) return RPSMove.Grab;
             return RPSMove.Super;
         }
     }

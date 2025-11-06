@@ -5,9 +5,9 @@ namespace Sumoball
 {
     public enum RPSMove
     {
-        Rock,
-        Paper,
-        Scissors,
+        Shove,
+        Slap,
+        Grab,
         Super // very rare move that always wins
     }
 
@@ -18,9 +18,9 @@ namespace Sumoball
             if (a == RPSMove.Super && b != RPSMove.Super) return true;
             if (b == RPSMove.Super && a != RPSMove.Super) return false;
             if (a == b) return false;
-            return (a == RPSMove.Rock && b == RPSMove.Scissors)
-                || (a == RPSMove.Paper && b == RPSMove.Rock)
-                || (a == RPSMove.Scissors && b == RPSMove.Paper);
+            return (a == RPSMove.Shove && b == RPSMove.Grab)
+                || (a == RPSMove.Slap && b == RPSMove.Shove)
+                || (a == RPSMove.Grab && b == RPSMove.Slap);
         }
     }
 }

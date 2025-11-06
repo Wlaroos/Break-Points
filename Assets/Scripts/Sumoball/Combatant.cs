@@ -22,6 +22,23 @@ namespace Sumoball
         [SerializeField] private bool _isLeft = true;
         public bool IsLeft => _isLeft;
 
+        [Header("Move Sprites (assign per-side)")]
+        [Tooltip("Sprites used when this combatant (if left) performs Shove/Slap/Grab")]
+        [SerializeField] private Sprite _leftShoveSprite;
+        [SerializeField] private Sprite _leftSlapSprite;
+        [SerializeField] private Sprite _leftGrabSprite;
+        [Tooltip("Sprites used when this combatant (if right) performs Shove/Slap/Grab")]
+        [SerializeField] private Sprite _rightShoveSprite;
+        [SerializeField] private Sprite _rightSlapSprite;
+        [SerializeField] private Sprite _rightGrabSprite;
+
+        [Header("Move Sprite Display")]
+        [Tooltip("How long the child move sprite stays fully visible before fading")]
+        [SerializeField, Min(0f)] private float _moveSpriteVisibleDuration = 0.6f;
+        [Tooltip("Duration of the fade-out after the visible period")]
+        [SerializeField, Min(0f)] private float _moveSpriteFadeDuration = 0.4f;
+        private Coroutine _moveSpriteCoroutine;
+
         // Edge visit tracking + per-distribution visit threshold (editable in inspector).
         [System.Serializable]
         private class EdgeDistributionEntry
@@ -46,9 +63,92 @@ namespace Sumoball
         private Vector3 _targetPosition;
         private bool isMoving;
         private SpriteRenderer _spriteRenderer;
+        private GameObject _childObject;
+        private SpriteRenderer _childSpriteRenderer;
 
         // PlayerAI lives on the same GameObject — cache it.
         private PlayerAI _playerAI;
+        
+        // Set the child sprite to reflect the chosen move.
+        // Accepts move names like "Shove"/"Slap"/"Grab". Uses ToString() so it is tolerant
+        // to different enum naming (e.g. Rock/Paper/Scissors variants) as long as names match.
+        public void SetMoveSprite(RPSMove move)
+        {
+            // we only need the child sprite renderer for move visuals
+            if (_childSpriteRenderer == null) return;
+            string name = move.ToString().ToLowerInvariant();
+            Sprite spriteToUse = null;
+            if (name == "shove" || name == "rock")
+            {
+                spriteToUse = _isLeft ? _leftShoveSprite : _rightShoveSprite;
+            }
+            else if (name == "slap" || name == "paper")
+            {
+                spriteToUse = _isLeft ? _leftSlapSprite : _rightSlapSprite;
+            }
+            else if (name == "grab" || name == "scissors")
+            {
+                spriteToUse = _isLeft ? _leftGrabSprite : _rightGrabSprite;
+            }
+            // if a sprite is assigned, apply it
+            // stop previous show coroutine if running
+            if (_moveSpriteCoroutine != null)
+            {
+                StopCoroutine(_moveSpriteCoroutine);
+                _moveSpriteCoroutine = null;
+            }
+            _moveSpriteCoroutine = StartCoroutine(ShowMoveSpriteCoroutine(spriteToUse));
+        }
+        // Shows the child move sprite briefly, then fades it out and hides the renderer.
+        private IEnumerator ShowMoveSpriteCoroutine(Sprite sprite)
+        {
+            if (_childSpriteRenderer == null)
+            {
+                yield break;
+            }
+            if (sprite == null)
+            {
+                // nothing to show -> ensure hidden
+                _childSpriteRenderer.enabled = false;
+                yield break;
+            }
+
+            _childSpriteRenderer.sprite = sprite;
+            _childSpriteRenderer.enabled = true;
+            Color c = _childSpriteRenderer.color;
+            c.a = 1f;
+            _childSpriteRenderer.color = c;
+
+            // fully visible period
+            if (_moveSpriteVisibleDuration > 0f)
+                yield return new WaitForSeconds(_moveSpriteVisibleDuration);
+
+            // fade out
+            float fade = Mathf.Max(0f, _moveSpriteFadeDuration);
+            if (fade <= 0f)
+            {
+                c.a = 0f;
+                _childSpriteRenderer.color = c;
+                _childSpriteRenderer.enabled = false;
+                _moveSpriteCoroutine = null;
+                yield break;
+            }
+
+            float t = 0f;
+            while (t < fade)
+            {
+                t += Time.deltaTime;
+                float p = Mathf.Clamp01(t / fade);
+                c.a = Mathf.Lerp(1f, 0f, p);
+                _childSpriteRenderer.color = c;
+                yield return null;
+            }
+
+            c.a = 0f;
+            _childSpriteRenderer.color = c;
+            _childSpriteRenderer.enabled = false;
+            _moveSpriteCoroutine = null;
+        }
 
         // Public state other systems (GameManager) can wait on
         public bool IsMoving { get; private set; }
@@ -64,7 +164,17 @@ namespace Sumoball
             transform.position = _targetPosition;
 
             // cache optional sprite renderer for tint feedback
-            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _childObject = transform.GetChild(0).gameObject;
+            _childSpriteRenderer = _childObject.GetComponent<SpriteRenderer>();
+            // start with child move sprite hidden
+            if (_childSpriteRenderer != null)
+            {
+                _childSpriteRenderer.enabled = false;
+                var c = _childSpriteRenderer.color;
+                c.a = 0f;
+                _childSpriteRenderer.color = c;
+            }
 
             // cache PlayerAI (assumed present on same GameObject)
             _playerAI = GetComponent<PlayerAI>();

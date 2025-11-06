@@ -49,6 +49,8 @@ namespace Sumoball
         [SerializeField] private int _countdownStart = 3;
         [SerializeField] private float _gameSpeed = 1f; // multiplier for Time.timeScale
 
+        [SerializeField] private GameObject _damageParticlePrefab;
+        
         private bool _gameRunning = false;
         private int _boardIndex = 0; // center index set at Start
 
@@ -183,6 +185,9 @@ namespace Sumoball
                 RPSMove leftMove = _leftAI.PickMove();
                 RPSMove rightMove = _rightAI.PickMove();
                 _ui?.ShowMoves(leftMove, rightMove);
+                // Update combatant sprites to reflect the chosen moves
+                _leftCombatant?.SetMoveSprite(leftMove);
+                _rightCombatant?.SetMoveSprite(rightMove);
 
                 // Resolve single RPS round (affects board and round score)
                 int result = 0; // 1 left wins, -1 right wins, 0 tie
@@ -213,11 +218,13 @@ namespace Sumoball
                 {
                     _leftCombatant.PlayRoundFeedback(true);
                     _rightCombatant.PlayRoundFeedback(false);
+                    SpawnDamageParticles(_rightCombatant);
                 }
                 else if (result == -1)
                 {
                     _leftCombatant.PlayRoundFeedback(false);
                     _rightCombatant.PlayRoundFeedback(true);
+                    SpawnDamageParticles(_leftCombatant);
                 }
                 else
                 {
@@ -336,6 +343,34 @@ namespace Sumoball
             // Game over - ensure UI shows final state
             _ui?.ShowScores(_roundScoreLeft, _roundScoreRight, _matchWinsLeft, _matchWinsRight);
             _ui?.ShowCountdown(0);
+        }
+
+        // Spawn damage particles at the losing combatant's position
+        private void SpawnDamageParticles(Combatant loser)
+        {
+            if (_damageParticlePrefab == null || loser == null) return;
+            GameObject go = Instantiate(_damageParticlePrefab, loser.transform.position, Quaternion.identity);
+
+            // Try to find a ParticleSystem on the prefab and tint it based on who lost:
+            // - left loses -> blue
+            // - right loses -> red
+            ParticleSystem ps = go.GetComponentInChildren<ParticleSystem>();
+            if (ps != null)
+            {
+                var main = ps.main;
+                if (loser == _leftCombatant)
+                {
+                    main.startColor = new Color(79, 222, 236, 255)/255f;
+                }
+                else if (loser == _rightCombatant)
+                {
+                    main.startColor = new Color(244, 116, 166, 255)/255f;
+                }
+                else
+                {
+                    main.startColor = Color.white;
+                }
+            }
         }
     }
 }

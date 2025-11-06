@@ -40,11 +40,11 @@ namespace Sumoball
         }
 
         // Combined score display (round score = current match RPS wins; match score = matches won)
-        public void ShowScores(int roundLeft, int roundRight, int matchLeft, int matchRight)
+        public void ShowScores(int strikeLeft, int strikeRight, int roundLeft, int roundRight)
         {
             if (_statusText)
             {
-                _statusText.text = $"Round: {roundLeft} - {roundRight}\nMatch: {matchLeft} - {matchRight}";
+                _statusText.text = $"Strikes: {strikeLeft} - {strikeRight}\nRounds: {roundLeft} - {roundRight}";
                 _statusText.color = Color.white;
             }
         }
