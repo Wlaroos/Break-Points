@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 00000000697c7358
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -214,6 +214,7 @@ GameObject:
   m_Component:
   - component: {fileID: 78876260}
   - component: {fileID: 78876259}
+  - component: {fileID: 78876261}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -237,18 +238,15 @@ MonoBehaviour:
   _horse02: {fileID: 2927187360751890398, guid: ca7e44e9c1eb4384885d963bf427d2a3, type: 3}
   _horse03: {fileID: 2927187360751890398, guid: eb385715cd640d84386ad599b873f041, type: 3}
   _horse04: {fileID: 2927187360751890398, guid: 3feca73e55d8e43419cb347f87a0ec82, type: 3}
+  _canvasManager: {fileID: 652675442}
+  _powerupPrefab: {fileID: -8428486639342061250, guid: cefea1578df4d8342811210982d42347, type: 3}
+  _powerupMoveDuration: 3
+  _tickTimeSeconds: 1
   _trackSectionPrefab: {fileID: 6091212283176501210, guid: 4749bb9ea8e3a2f44a5584c362c6460c, type: 3}
   _trackLength: 20
   _trackHorizontalSpacing: 0.8
-  _trackVerticalSpacing: 1.75
-  _powerupPrefab: {fileID: -8428486639342061250, guid: cefea1578df4d8342811210982d42347, type: 3}
-  _powerupMoveCount: 3
+  _trackVerticalSpacing: 1
   _spawnOrigin: {x: -7.5, y: 1.5, z: 0}
-  _horseGizmoColor: {r: 0, g: 1, b: 1, a: 1}
-  _trackGizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  _horseGizmoRadius: 0.15
-  _tickTimeSeconds: 0.5
-  _canvasManager: {fileID: 652675442}
 --- !u!4 &78876260
 Transform:
   m_ObjectHideFlags: 0
@@ -264,6 +262,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &78876261
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78876258}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -2
+  m_SortAtRoot: 0
 --- !u!1 &163543810
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,6 +285,7 @@ GameObject:
   - component: {fileID: 163543811}
   - component: {fileID: 163543813}
   - component: {fileID: 163543812}
+  - component: {fileID: 163543814}
   m_Layer: 5
   m_Name: BGPanel
   m_TagString: Untagged
@@ -341,6 +352,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163543810}
   m_CullTransparentMesh: 1
+--- !u!210 &163543814
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163543810}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -10
+  m_SortAtRoot: 0
 --- !u!1 &210285573
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,7 +656,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 1483963497
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &652675441
