@@ -266,16 +266,16 @@ MonoBehaviour:
   _horse03: {fileID: 2927187360751890398, guid: eb385715cd640d84386ad599b873f041, type: 3}
   _horse04: {fileID: 2927187360751890398, guid: 3feca73e55d8e43419cb347f87a0ec82, type: 3}
   _canvasManager: {fileID: 652675442}
-  _tickTimeSeconds: 1
+  _tickTimeSeconds: 0.3
   _trackSectionPrefab: {fileID: 5510986089105303311, guid: 4749bb9ea8e3a2f44a5584c362c6460c, type: 3}
   _smoothTrackSectionPrefab: {fileID: 5510986089105303311, guid: 548edeef37afd6147abb975e28e9de13, type: 3}
   _useSmoothTrackSections: 0
   _trackLength: 42
   _startingTrackAmount: 10
   _finishTrackAmount: 13
-  _trackHorizontalSpacing: 0.75
+  _trackHorizontalSpacing: 0.8
   _trackVerticalSpacing: 1
-  _spawnOrigin: {x: -8, y: 1, z: 0}
+  _spawnOrigin: {x: -8.75, y: 1, z: 0}
   _startLinePrefab: {fileID: 8591060349278433396, guid: afba3469b331d1f40ae86d92de87f4b3, type: 3}
   _finishLinePrefab: {fileID: 8239468621090027897, guid: 5a862134945341a4e952d1c0184c8b08, type: 3}
   _obstaclePrefab: {fileID: 7415273881668389202, guid: 3962934b732f4a444b714b2f6b0a4c74, type: 3}
@@ -431,7 +431,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -456,7 +456,7 @@ Transform:
   m_GameObject: {fileID: 210285573}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 7.64, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
