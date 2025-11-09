@@ -100,6 +100,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
 
         _canvasManager.ShowRaceStart();
+
+        foreach (var line in _startLines)
+        {
+            Destroy(line);
+        }
+
         StartCoroutine(TickLoop());
     }
 
@@ -131,7 +137,7 @@ public class GameManager : MonoBehaviour
                 {
                     _trackSectionPrefab = _smoothTrackSectionPrefab;
                 }
-                
+
                 GameObject go = Instantiate(_trackSectionPrefab, spawnPosition, Quaternion.identity);
 
                 // make the instantiated track section a child of this manager for hierarchy organization
@@ -166,6 +172,18 @@ public class GameManager : MonoBehaviour
                 go.transform.SetParent(this.transform, true);
 
                 inst = go.transform;
+            }
+
+            if (i == 1 && _startLinePrefab != null)
+            {
+                GameObject startLine = Instantiate(_startLinePrefab, spawnPosition, Quaternion.identity);
+                startLine.transform.SetParent(this.transform, true);
+                _startLines.Add(startLine);
+            }
+            if (i == _trackLength - 1 && _finishLinePrefab != null)
+            {
+                GameObject finishLine = Instantiate(_finishLinePrefab, spawnPosition, Quaternion.identity);
+                finishLine.transform.SetParent(this.transform, true);
             }
 
             sections.Add(inst);
@@ -222,8 +240,8 @@ public class GameManager : MonoBehaviour
                     if (spacesMoved > 0)
                         horse.NotifyMoved(spacesMoved);
 
-                    // check for winner
-                    if (trackCount > 0 && target == trackCount - 1)
+                    // check for winner, track before finish line
+                    if (trackCount > 0 && target == trackCount - 2)
                     {
                         if (_canvasManager != null)
                         {
