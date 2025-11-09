@@ -3,8 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace MavMovin
-{
     public class GameCanvasManager : MonoBehaviour
     {
         [Header("Main message")]
@@ -80,4 +78,3 @@ namespace MavMovin
             }
         }
     }
-}

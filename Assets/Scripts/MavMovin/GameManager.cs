@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace MavMovin
-{
     public class GameManager : MonoBehaviour
     {
         [Header("Horse Settings")]
@@ -16,11 +14,6 @@ namespace MavMovin
         // UI: canvas manager to display messages & statuses
         [Header("UI")]
         [SerializeField] private GameCanvasManager _canvasManager;
-        
-        [Header("Powerup Settings")]
-        [SerializeField] private Powerup _powerupPrefab;
-        // duration a powerup boost lasts in number of track spaces moved
-        [SerializeField] private int _powerupMoveDuration = 3;
 
         [Header("Game Settings")]
         [SerializeField] private float _tickTimeSeconds = 1f;
@@ -39,16 +32,12 @@ namespace MavMovin
         private List<Horse> _horses = new List<Horse>();
         private List<List<Transform>> _trackLanes = new List<List<Transform>>();
         private List<int> _horseTrackIndices = new List<int>();
-        private List<Powerup> _lanePowerups = new List<Powerup>();
-        private List<int> _lanePowerupIndices = new List<int>();
 
         void Awake()
         {
             _horses.Clear();
             _trackLanes.Clear();
             _horseTrackIndices.Clear();
-            _lanePowerups.Clear();
-            _lanePowerupIndices.Clear();
 
             for (int i = 0; i < 4; i++)
             {
@@ -57,23 +46,6 @@ namespace MavMovin
                 // generate track and get references to sections
                 var laneSections = GenerateTrack(laneOrigin);
                 _trackLanes.Add(laneSections);
-
-                // spawn 1 powerup at a random section on this lane (never on the starting section)
-                if (_powerupPrefab != null && laneSections.Count > 1)
-                {
-                    // pick from 1..Count-1 so index 0 (start) is excluded
-                    int puIndex = Random.Range(1, laneSections.Count);
-                    Transform section = laneSections[puIndex];
-                    Powerup puInstance = Instantiate(_powerupPrefab, section.position, Quaternion.identity);
-                    _lanePowerups.Add(puInstance);
-                    _lanePowerupIndices.Add(puIndex);
-                }
-                else
-                {
-                    // not enough sections or no prefab -> no powerup for this lane
-                    _lanePowerups.Add(null);
-                    _lanePowerupIndices.Add(-1);
-                }
 
                 // instantiate horse prefab and place at first section (index 0) if available
                 Horse horsePrefab = GetHorseByIndex(i);
@@ -238,19 +210,6 @@ namespace MavMovin
                         if (spacesMoved > 0)
                             horse.NotifyMoved(spacesMoved);
 
-                        // check powerup pickup
-                        if (_lanePowerups[lane] != null && _lanePowerupIndices[lane] == target)
-                        {
-                            Powerup pu = _lanePowerups[lane];
-                            if (pu != null)
-                            {
-                                horse.ApplyMovePercentBoost(pu.MovePercentBoost, _powerupMoveDuration);
-                                Destroy(pu.gameObject);
-                                _lanePowerups[lane] = null;
-                                _lanePowerupIndices[lane] = -1;
-                            }
-                        }
-
                         // check for winner
                         if (trackCount > 0 && target == trackCount - 1)
                         {
@@ -329,4 +288,3 @@ namespace MavMovin
 #endif
 
     }
-}

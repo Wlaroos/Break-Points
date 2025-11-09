@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MavMovin
-{
     public class Horse : MonoBehaviour
     {
         [SerializeField, Range(0, 1)] private float _moveChance = 0.5f;
@@ -78,4 +76,3 @@ namespace MavMovin
             }
         }
     }
-}

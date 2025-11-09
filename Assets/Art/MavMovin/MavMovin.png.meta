@@ -113,8 +113,8 @@ TextureImporter:
       name: MavMovin_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 19
+        x: 2
+        y: 33
         width: 18
         height: 16
       alignment: 9
@@ -134,10 +134,10 @@ TextureImporter:
       name: MavMovin_1
       rect:
         serializedVersion: 2
-        x: 19
-        y: 19
+        x: 20
+        y: 33
         width: 18
-        height: 16
+        height: 20
       alignment: 9
       pivot: {x: 0.6111111, y: 0.4375}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,12 +155,12 @@ TextureImporter:
       name: MavMovin_2
       rect:
         serializedVersion: 2
-        x: 45
-        y: 17
+        x: 46
+        y: 31
         width: 11
         height: 20
       alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -176,8 +176,8 @@ TextureImporter:
       name: MavMovin_3
       rect:
         serializedVersion: 2
-        x: 66
-        y: 19
+        x: 8
+        y: 2
         width: 9
         height: 11
       alignment: 9
@@ -197,8 +197,8 @@ TextureImporter:
       name: MavMovin_4
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1
+        x: 2
+        y: 15
         width: 18
         height: 16
       alignment: 9
@@ -218,8 +218,8 @@ TextureImporter:
       name: MavMovin_5
       rect:
         serializedVersion: 2
-        x: 19
-        y: 1
+        x: 20
+        y: 15
         width: 18
         height: 16
       alignment: 9
@@ -239,8 +239,8 @@ TextureImporter:
       name: MavMovin_6
       rect:
         serializedVersion: 2
-        x: 40
-        y: 1
+        x: 41
+        y: 15
         width: 21
         height: 13
       alignment: 9
@@ -260,8 +260,8 @@ TextureImporter:
       name: MavMovin_7
       rect:
         serializedVersion: 2
-        x: 66
-        y: 1
+        x: 115
+        y: 15
         width: 25
         height: 16
       alignment: 9
@@ -281,8 +281,8 @@ TextureImporter:
       name: MavMovin_8
       rect:
         serializedVersion: 2
-        x: 93
-        y: 1
+        x: 142
+        y: 15
         width: 33
         height: 16
       alignment: 0
@@ -294,6 +294,132 @@ TextureImporter:
       bones: []
       spriteID: 46b6e9d0e39d4ba4fb03753939419d57
       internalID: 1342377962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_9
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 34
+        width: 33
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 059ea8d05f64c7144a14b22fc90d0be2
+      internalID: -471203363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_10
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 34
+        width: 25
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.875}
+      border: {x: 3, y: 0, z: 3, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e78769370382a9043b4c42c82f99b782
+      internalID: -620511621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_11
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 31
+        width: 11
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb72de67bd30d034aa36dd2df5fee190
+      internalID: 32359589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_12
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 31
+        width: 11
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bcc928d30c26df644b17c96c620e36fd
+      internalID: 1537593645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_13
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 15
+        width: 22
+        height: 13
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15384616}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11a339e606a7f4c478a9c66921125c75
+      internalID: 1779768724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_14
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 15
+        width: 21
+        height: 13
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15384616}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20b9d975b0202254bb24ddc810d45887
+      internalID: -608046673
       vertices: []
       indices: 
       edges: []
@@ -311,6 +437,11 @@ TextureImporter:
     nameFileIdTable:
       MavMovin_0: -96690627
       MavMovin_1: 1987605431
+      MavMovin_10: -620511621
+      MavMovin_11: 32359589
+      MavMovin_12: 1537593645
+      MavMovin_13: 1779768724
+      MavMovin_14: -608046673
       MavMovin_2: -875947865
       MavMovin_3: 1938522099
       MavMovin_4: 1309795084
@@ -318,6 +449,7 @@ TextureImporter:
       MavMovin_6: -1708146598
       MavMovin_7: -448710683
       MavMovin_8: 1342377962
+      MavMovin_9: -471203363
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
