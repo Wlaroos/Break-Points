@@ -213,8 +213,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 78876260}
-  - component: {fileID: 78876259}
   - component: {fileID: 78876261}
+  - component: {fileID: 78876262}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -222,31 +222,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &78876259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 78876258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a02523555689f9a49bf22548973a155b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _horse01: {fileID: 2927187360751890398, guid: 788ffe8e5d39f9942b4522591c11b311, type: 3}
-  _horse02: {fileID: 2927187360751890398, guid: ca7e44e9c1eb4384885d963bf427d2a3, type: 3}
-  _horse03: {fileID: 2927187360751890398, guid: eb385715cd640d84386ad599b873f041, type: 3}
-  _horse04: {fileID: 2927187360751890398, guid: 3feca73e55d8e43419cb347f87a0ec82, type: 3}
-  _canvasManager: {fileID: 652675442}
-  _powerupPrefab: {fileID: -8428486639342061250, guid: cefea1578df4d8342811210982d42347, type: 3}
-  _powerupMoveDuration: 3
-  _tickTimeSeconds: 1
-  _trackSectionPrefab: {fileID: 6091212283176501210, guid: 4749bb9ea8e3a2f44a5584c362c6460c, type: 3}
-  _trackLength: 20
-  _trackHorizontalSpacing: 0.8
-  _trackVerticalSpacing: 1
-  _spawnOrigin: {x: -7.5, y: 1.5, z: 0}
 --- !u!4 &78876260
 Transform:
   m_ObjectHideFlags: 0
@@ -274,6 +249,36 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: -2
   m_SortAtRoot: 0
+--- !u!114 &78876262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78876258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02523555689f9a49bf22548973a155b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _horse01: {fileID: 2927187360751890398, guid: 788ffe8e5d39f9942b4522591c11b311, type: 3}
+  _horse02: {fileID: 2927187360751890398, guid: ca7e44e9c1eb4384885d963bf427d2a3, type: 3}
+  _horse03: {fileID: 2927187360751890398, guid: eb385715cd640d84386ad599b873f041, type: 3}
+  _horse04: {fileID: 2927187360751890398, guid: 3feca73e55d8e43419cb347f87a0ec82, type: 3}
+  _canvasManager: {fileID: 652675442}
+  _tickTimeSeconds: 1
+  _trackSectionPrefab: {fileID: 5510986089105303311, guid: 4749bb9ea8e3a2f44a5584c362c6460c, type: 3}
+  _smoothTrackSectionPrefab: {fileID: 5510986089105303311, guid: 548edeef37afd6147abb975e28e9de13, type: 3}
+  _useSmoothTrackSections: 0
+  _trackLength: 42
+  _startingTrackAmount: 10
+  _finishTrackAmount: 13
+  _trackHorizontalSpacing: 0.75
+  _trackVerticalSpacing: 1
+  _spawnOrigin: {x: -8, y: 1, z: 0}
+  _startLinePrefab: {fileID: 8591060349278433396, guid: afba3469b331d1f40ae86d92de87f4b3, type: 3}
+  _finishLinePrefab: {fileID: 8239468621090027897, guid: 5a862134945341a4e952d1c0184c8b08, type: 3}
+  _obstaclePrefab: {fileID: 7415273881668389202, guid: 3962934b732f4a444b714b2f6b0a4c74, type: 3}
 --- !u!1 &163543810
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,90 +699,6 @@ MonoBehaviour:
   _mainTextTMP: {fileID: 2140975952}
   _tickPulseRect: {fileID: 405268341}
   _minPulseScale: 0.05
---- !u!1 &695217298
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 695217300}
-  - component: {fileID: 695217299}
-  m_Layer: 0
-  m_Name: Obstacle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!212 &695217299
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 695217298}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -875947865, guid: 722a4c481afb0744e917bc0df408c538, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.6875, y: 1.25}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!4 &695217300
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 695217298}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11, y: -0.18, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1616456059
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,5 +916,4 @@ SceneRoots:
   - {fileID: 210285576}
   - {fileID: 53859883}
   - {fileID: 652675441}
-  - {fileID: 695217300}
   - {fileID: 78876260}
