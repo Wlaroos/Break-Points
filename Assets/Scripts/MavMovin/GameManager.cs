@@ -32,8 +32,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _obstaclePrefab;
 
     private Color _horseGizmoColor = Color.cyan;
+    private Color _startTrackGizmoColor = Color.green;
     private Color _trackGizmoColor = Color.yellow;
+    private Color _finishTrackGizmoColor = Color.red;
     private float _horseGizmoRadius = 0.25f;
+
+    // Default lane colors used if a Horse.DisplayColor isn't available
+    private Color[] _laneDefaultColors = new Color[] {
+        new Color(0.0f, 0.7f, 1.0f), // cyan-ish
+        new Color(1.0f, 0.5f, 0.0f), // orange
+        new Color(0.8f, 0.2f, 0.8f), // magenta
+        new Color(0.4f, 1.0f, 0.2f)  // greenish
+    };
 
     private List<Horse> _horses = new List<Horse>();
     private List<List<Transform>> _trackLanes = new List<List<Transform>>();
@@ -226,19 +236,45 @@ public class GameManager : MonoBehaviour
 
                 int currentIndex = _horseTrackIndices[lane];
                 int trackCount = (_trackLanes.Count > lane && _trackLanes[lane] != null) ? _trackLanes[lane].Count : 0;
-                // decide move or wait using the horse's MoveChance
-                if (Random.value <= horse.MoveChance)
+
+                // Determine which region the horse is currently on and pick the correct values
+                float moveChance;
+                int moveDistance;
+
+                if (trackCount == 0)
                 {
-                    int target = Mathf.Min(currentIndex + horse.MoveDistance, (trackCount > 0) ? trackCount - 1 : currentIndex);
+                    // fallback to start values if no track info
+                    moveChance = horse.MoveChance;
+                    moveDistance = horse.StartMoveDistance;
+                }
+                else if (currentIndex < _startingTrackAmount)
+                {
+                    // Start region
+                    moveChance = horse.MoveChance; // horse.MoveChance maps to start move chance in Horse.cs
+                    moveDistance = horse.StartMoveDistance;
+                }
+                else if (currentIndex >= trackCount - _finishTrackAmount)
+                {
+                    // Finish region
+                    moveChance = horse.FinishMoveChance;
+                    moveDistance = horse.FinishMoveDistance;
+                }
+                else
+                {
+                    // Middle region
+                    moveChance = horse.MiddleMoveChance;
+                    moveDistance = horse.MiddleMoveDistance;
+                }
+
+                // decide move or wait using the region-specific chance and distance
+                if (Random.value <= moveChance)
+                {
+                    int target = Mathf.Min(currentIndex + moveDistance, (trackCount > 0) ? trackCount - 1 : currentIndex);
                     int spacesMoved = Mathf.Abs(target - currentIndex);
                     _horseTrackIndices[lane] = target;
 
                     if (trackCount > 0)
                         horse.TeleportTo(_trackLanes[lane][target].position);
-
-                    // notify horse that it moved so move-based boosts decrement
-                    if (spacesMoved > 0)
-                        horse.NotifyMoved(spacesMoved);
 
                     // check for winner, track before finish line
                     if (trackCount > 0 && target == trackCount - 2)
@@ -279,12 +315,35 @@ public class GameManager : MonoBehaviour
             Gizmos.DrawSphere(horsePos, _horseGizmoRadius);
         }
 
-        // draw track sections for each lane
-        Gizmos.color = _trackGizmoColor;
+        // draw track sections per lane using fixed colors per region (start/mid/finish)
         for (int lane = 0; lane < 4; lane++)
         {
             Vector3 laneStart = _spawnOrigin + new Vector3(0, -(lane * _trackVerticalSpacing), 0);
-            for (int i = 0; i < _trackLength; i++)
+
+            // Use fixed colors for regions: start = green, middle = yellow, finish = red
+            Color startColor = _startTrackGizmoColor;
+            Color midColor = _trackGizmoColor;
+            Color finishColor = _finishTrackGizmoColor;
+
+            // starting region
+            Gizmos.color = startColor;
+            for (int i = 0; i < _startingTrackAmount; i++)
+            {
+                Vector3 spawnPos = laneStart + new Vector3(i * trackWidth, 0, 0);
+                Gizmos.DrawWireCube(spawnPos, new Vector3(trackWidth * 0.9f, _trackVerticalSpacing * 0.8f, 0.1f));
+            }
+
+            // middle region (between start and finish)
+            Gizmos.color = midColor;
+            for (int i = _startingTrackAmount; i < _trackLength - _finishTrackAmount; i++)
+            {
+                Vector3 spawnPos = laneStart + new Vector3(i * trackWidth, 0, 0);
+                Gizmos.DrawWireCube(spawnPos, new Vector3(trackWidth * 0.9f, _trackVerticalSpacing * 0.8f, 0.1f));
+            }
+
+            // finish region
+            Gizmos.color = finishColor;
+            for (int i = _trackLength - _finishTrackAmount; i < _trackLength; i++)
             {
                 Vector3 spawnPos = laneStart + new Vector3(i * trackWidth, 0, 0);
                 Gizmos.DrawWireCube(spawnPos, new Vector3(trackWidth * 0.9f, _trackVerticalSpacing * 0.8f, 0.1f));
