@@ -84,16 +84,9 @@ namespace Sumoball
         IEnumerator Start()
         {
             // Basic validation
-            if (!_leftCombatant || !_rightCombatant || !_leftAI || !_rightAI)
+            if (!_leftCombatant || !_rightCombatant || !_leftAI || !_rightAI || _board == null)
             {
-                Debug.LogError("Assign Combatants and AIs on the GameManager in the inspector.");
-                enabled = false;
-                yield break;
-            }
-
-            if (_board == null)
-            {
-                Debug.LogError("Assign a Board component to the GameManager in the inspector.");
+                Debug.LogError("Assign Combatants, AIs and Board on the GameManager in the inspector.");
                 enabled = false;
                 yield break;
             }
@@ -189,6 +182,79 @@ namespace Sumoball
                 _leftCombatant?.SetMoveSprite(leftMove);
                 _rightCombatant?.SetMoveSprite(rightMove);
 
+                // Super move => immediate match win (not just a single push)
+                if (leftMove == RPSMove.Super && rightMove != RPSMove.Super)
+                {
+                    _ui?.ShowStatus($"{_leftCombatant.CombatantName} used SUPER!");
+
+                    // Push the right combatant to the right-most wall (visual knockout like normal edge push)
+                    int lastIdx = _board.Positions.Length - 1;
+                    _boardIndex = lastIdx;
+                    Vector3 rightWallBase = _board.Positions[_boardIndex];
+                    // Move right to wall, left remains one column inward for the visual
+                    StartCoroutine(_rightCombatant.MoveToPositionCoroutine(rightWallBase, _boardIndex));
+                    int leftStayIdx = Mathf.Max(0, lastIdx - 1);
+                    Vector3 leftStayBase = _board.Positions[leftStayIdx];
+                    StartCoroutine(_leftCombatant.MoveToPositionCoroutine(leftStayBase, leftStayIdx));
+
+                    // wait for movement (or timeout)
+                    yield return StartCoroutine(WaitForMovement(_roundDelay + 2f));
+ 
+                    // Treat as knockout: right loses the match
+                    _ui?.ShowStatus($"{_rightCombatant.CombatantName} knocked out by SUPER. {_leftCombatant.CombatantName} wins match!");
+                    _matchWinsLeft++;
+                    SpawnDamageParticles(_rightCombatant);
+
+                    // Update match display and check series win
+                    _ui?.ShowScores(_roundScoreLeft, _roundScoreRight, _matchWinsLeft, _matchWinsRight);
+                    if (_matchWinsLeft >= _winsNeeded)
+                    {
+                        _ui?.ShowStatus($"{_leftCombatant.CombatantName} wins series {_matchWinsLeft}-{_matchWinsRight}");
+                        _gameRunning = false;
+                        break;
+                    }
+
+                    // reset for next match
+                    yield return StartCoroutine(ResetMatchToCenterCoroutine());
+                    continue;
+                }
+
+                if (rightMove == RPSMove.Super && leftMove != RPSMove.Super)
+                {
+                    _ui?.ShowStatus($"{_rightCombatant.CombatantName} used SUPER!");
+
+                    // Push the left combatant to the left-most wall (visual knockout like normal edge push)
+                    int firstIdx = 0;
+                    _boardIndex = firstIdx;
+                    Vector3 leftWallBase = _board.Positions[_boardIndex];
+                    // Move left to wall, right remains one column inward for the visual
+                    StartCoroutine(_leftCombatant.MoveToPositionCoroutine(leftWallBase, _boardIndex));
+                    int rightStayIdx = Mathf.Min(_board.Positions.Length - 1, 1);
+                    Vector3 rightStayBase = _board.Positions[rightStayIdx];
+                    StartCoroutine(_rightCombatant.MoveToPositionCoroutine(rightStayBase, rightStayIdx));
+
+                    // wait for movement (or timeout)
+                    yield return StartCoroutine(WaitForMovement(_roundDelay + 2f));
+ 
+                    // Treat as knockout: left loses the match
+                    _ui?.ShowStatus($"{_leftCombatant.CombatantName} knocked out by SUPER. {_rightCombatant.CombatantName} wins match!");
+                    _matchWinsRight++;
+                    SpawnDamageParticles(_leftCombatant);
+
+                    // Update match display and check series win
+                    _ui?.ShowScores(_roundScoreLeft, _roundScoreRight, _matchWinsLeft, _matchWinsRight);
+                    if (_matchWinsRight >= _winsNeeded)
+                    {
+                        _ui?.ShowStatus($"{_rightCombatant.CombatantName} wins series {_matchWinsRight}-{_matchWinsLeft}");
+                        _gameRunning = false;
+                        break;
+                    }
+
+                    // reset for next match
+                    yield return StartCoroutine(ResetMatchToCenterCoroutine());
+                    continue;
+                }
+
                 // Resolve single RPS round (affects board and round score)
                 int result = 0; // 1 left wins, -1 right wins, 0 tie
                 if (leftMove == rightMove)
@@ -260,13 +326,7 @@ namespace Sumoball
                 }
 
                 // Wait while movements occur (wait until both combatants finish or timeout)
-                float timeout = _roundDelay + 2f; // buffer in case movement lingers
-                float t = 0f;
-                while ((_leftCombatant.IsMoving || _rightCombatant.IsMoving) && t < timeout)
-                {
-                    t += Time.deltaTime;
-                    yield return null;
-                }
+                yield return StartCoroutine(WaitForMovement(_roundDelay + 2f));
  
                 // Check knockout by wall using Board column count
                 int lastIndex = _board.Positions.Length - 1;
@@ -308,31 +368,7 @@ namespace Sumoball
                     }
 
                     // Otherwise prepare next match: reset round scores and board to center
-                    _roundScoreLeft = 0;
-                    _roundScoreRight = 0;
-                    int center = _board.CenterIndex;
-                    _boardIndex = center;
-                    Vector3 centerBase = _board.Positions[center];
- 
-                    // start coroutines to move back to center and wait
-                    StartCoroutine(_leftCombatant.MoveToPositionCoroutine(centerBase, center));
-                    StartCoroutine(_rightCombatant.MoveToPositionCoroutine(centerBase, center));
-                    float timeout2 = 2f;
-                    float tt = 0f;
-                    while ((_leftCombatant.IsMoving || _rightCombatant.IsMoving) && tt < timeout2)
-                    {
-                        tt += Time.deltaTime;
-                        yield return null;
-                    }
-
-                    // Reset edge visit counts for both combatants
-                    _leftCombatant?.ResetEdgeVisits();
-                    _rightCombatant?.ResetEdgeVisits();
-
-                    // small buffer
-                    yield return new WaitForSeconds(0.1f);
-                    continue; // next match continues
-                    
+                    yield return StartCoroutine(ResetMatchToCenterCoroutine());
                 }
 
                 // If no knockout, matches continue; series only tracked by match wins
@@ -350,7 +386,7 @@ namespace Sumoball
         {
             if (_damageParticlePrefab == null || loser == null) return;
             GameObject go = Instantiate(_damageParticlePrefab, loser.transform.position, Quaternion.identity);
-
+ 
             // Try to find a ParticleSystem on the prefab and tint it based on who lost:
             // - left loses -> blue
             // - right loses -> red
@@ -360,17 +396,44 @@ namespace Sumoball
                 var main = ps.main;
                 if (loser == _leftCombatant)
                 {
-                    main.startColor = new Color(79, 222, 236, 255)/255f;
+                    main.startColor = new Color(79, 222, 236, 255);
                 }
                 else if (loser == _rightCombatant)
                 {
-                    main.startColor = new Color(244, 116, 166, 255)/255f;
+                    main.startColor = new Color(244, 116, 166, 255);
                 }
                 else
                 {
                     main.startColor = Color.white;
                 }
             }
+        }
+ 
+        // Wait until both combatants stop moving or the given timeout elapses
+        private IEnumerator WaitForMovement(float timeout)
+        {
+            float t = 0f;
+            while ((_leftCombatant.IsMoving || _rightCombatant.IsMoving) && t < timeout)
+            {
+                t += Time.deltaTime;
+                yield return null;
+            }
+        }
+ 
+        // Reset round scores, move both combatants back to center and reset edge visits
+        private IEnumerator ResetMatchToCenterCoroutine()
+        {
+            _roundScoreLeft = 0;
+            _roundScoreRight = 0;
+            int center = _board.CenterIndex;
+            _boardIndex = center;
+            Vector3 centerBase = _board.Positions[center];
+            StartCoroutine(_leftCombatant.MoveToPositionCoroutine(centerBase, center));
+            StartCoroutine(_rightCombatant.MoveToPositionCoroutine(centerBase, center));
+            yield return StartCoroutine(WaitForMovement(2f));
+            _leftCombatant?.ResetEdgeVisits();
+            _rightCombatant?.ResetEdgeVisits();
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

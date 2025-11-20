@@ -63,7 +63,7 @@ namespace Sumoball
         private Vector3 _targetPosition;
         private bool isMoving;
         private SpriteRenderer _spriteRenderer;
-        private GameObject _childObject;
+        private GameObject _choiceObject;
         private SpriteRenderer _childSpriteRenderer;
 
         // PlayerAI lives on the same GameObject — cache it.
@@ -165,8 +165,17 @@ namespace Sumoball
 
             // cache optional sprite renderer for tint feedback
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _childObject = transform.GetChild(0).gameObject;
-            _childSpriteRenderer = _childObject.GetComponent<SpriteRenderer>();
+
+            if(_isLeft)
+            {
+                 _choiceObject = GameObject.Find("LeftChoiceSprite");
+            }
+            else
+            {
+                 _choiceObject = GameObject.Find("RightChoiceSprite");
+            }
+            
+            _childSpriteRenderer = _choiceObject.GetComponent<SpriteRenderer>();
             // start with child move sprite hidden
             if (_childSpriteRenderer != null)
             {
