@@ -38,6 +38,8 @@ public class Horse : MonoBehaviour
 
     private Coroutine _moveCoroutine;
 
+    private Animator _anim;
+
     // Ensure serialized values are valid in the editor and always sum to 1.0
     void OnValidate()
     {
@@ -54,6 +56,8 @@ public class Horse : MonoBehaviour
     void Awake()
     {
         _moveLerpDuration = FindObjectOfType<GameManager>().TickTimeSeconds / 2;
+
+        _anim = GetComponent<Animator>();
     }
 
     public void MoveTo(Vector3 worldPos)
@@ -77,6 +81,8 @@ public class Horse : MonoBehaviour
 
     private IEnumerator MoveToCoroutine(Vector3 target, float duration)
     {
+        _anim?.SetBool("isMoving", true);
+        
         Vector3 start = transform.position;
         if (duration <= 0f)
         {
@@ -96,5 +102,7 @@ public class Horse : MonoBehaviour
 
         transform.position = target;
         _moveCoroutine = null;
+
+        _anim?.SetBool("isMoving", false);
     }
 }
