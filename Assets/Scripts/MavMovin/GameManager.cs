@@ -269,7 +269,7 @@ public class GameManager : MonoBehaviour
                 // decide move or wait using the region-specific chance and distance
                 if (Random.value <= moveChance)
                 {
-                    int target = Mathf.Min(currentIndex + moveDistance, (trackCount > 0) ? trackCount - 1 : currentIndex);
+                    int target = Mathf.Min(currentIndex + moveDistance, (trackCount > 0) ? trackCount - 2 : currentIndex);
                     int spacesMoved = Mathf.Abs(target - currentIndex);
                     _horseTrackIndices[lane] = target;
 
@@ -277,7 +277,7 @@ public class GameManager : MonoBehaviour
                         horse.TeleportTo(_trackLanes[lane][target].position);
 
                     // check for winner, track before finish line
-                    if (trackCount > 0 && target == trackCount - 2)
+                    if (trackCount > 0 && target >= trackCount - 2)
                     {
                         if (_canvasManager != null)
                         {
