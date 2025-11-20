@@ -97,7 +97,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5369cad99f0d7ec48a34aa8b068e6cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveChance: 0.13
-  _waitChance: 0.87
-  _moveDistance: 4
+  _startMoveChance: 0.5
+  _startWaitChance: 0.5
+  _startMoveDistance: 1
+  _middleMoveChance: 0.5
+  _middleWaitChance: 0.5
+  _middleMoveDistance: 1
+  _finishMoveChance: 0.5
+  _finishWaitChance: 0.5
+  _finishMoveDistance: 1
   _displayColor: {r: 0.9725491, g: 0.74509805, b: 0.28627452, a: 1}

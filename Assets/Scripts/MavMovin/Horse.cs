@@ -34,6 +34,10 @@ public class Horse : MonoBehaviour
     [SerializeField] private Color _displayColor;
     public Color DisplayColor => _displayColor;
 
+    private float _moveLerpDuration;
+
+    private Coroutine _moveCoroutine;
+
     // Ensure serialized values are valid in the editor and always sum to 1.0
     void OnValidate()
     {
@@ -47,8 +51,50 @@ public class Horse : MonoBehaviour
         _finishWaitChance = 1f - _finishMoveChance;
     }
 
-    public void TeleportTo(Vector3 worldPos)
+    void Awake()
     {
-        transform.position = worldPos;
+        _moveLerpDuration = FindObjectOfType<GameManager>().TickTimeSeconds / 2;
+    }
+
+    public void MoveTo(Vector3 worldPos)
+    {
+        // if duration is zero, teleport immediately
+        if (_moveLerpDuration <= 0f)
+        {
+            if (_moveCoroutine != null)
+            {
+                StopCoroutine(_moveCoroutine);
+                _moveCoroutine = null;
+            }
+            transform.position = worldPos;
+            return;
+        }
+
+        // start smooth move coroutine
+        if (_moveCoroutine != null) StopCoroutine(_moveCoroutine);
+        _moveCoroutine = StartCoroutine(MoveToCoroutine(worldPos, _moveLerpDuration));
+    }
+
+    private IEnumerator MoveToCoroutine(Vector3 target, float duration)
+    {
+        Vector3 start = transform.position;
+        if (duration <= 0f)
+        {
+            transform.position = target;
+            _moveCoroutine = null;
+            yield break;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            float t = Mathf.Clamp01(elapsed / duration);
+            transform.position = Vector3.Lerp(start, target, t);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = target;
+        _moveCoroutine = null;
     }
 }

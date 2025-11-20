@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameCanvasManager _canvasManager;
     [Header("Game Settings")]
     [SerializeField] private float _tickTimeSeconds = 1f;
+    public float TickTimeSeconds => _tickTimeSeconds;
     [Header("Track Settings")]
     [SerializeField] private GameObject _trackSectionPrefab;
     [SerializeField] private GameObject _smoothTrackSectionPrefab;
@@ -49,7 +50,8 @@ public class GameManager : MonoBehaviour
     private List<List<Transform>> _trackLanes = new List<List<Transform>>();
     private List<int> _horseTrackIndices = new List<int>();
     private List<GameObject> _startLines = new List<GameObject>();
-
+    private List<GameObject> _finishLines = new List<GameObject>();
+    
     void Awake()
     {
         _horses.Clear();
@@ -70,7 +72,7 @@ public class GameManager : MonoBehaviour
             {
                 Horse horseInstance = Instantiate(horsePrefab);
                 Vector3 pos = (laneSections.Count > 0) ? laneSections[0].position : laneOrigin;
-                horseInstance.TeleportTo(pos);
+                horseInstance.MoveTo(pos);
                 _horses.Add(horseInstance);
                 _horseTrackIndices.Add(0);
             }
@@ -78,6 +80,22 @@ public class GameManager : MonoBehaviour
             {
                 _horses.Add(null);
                 _horseTrackIndices.Add(0);
+            }
+        }
+
+        // populate CameraController with the created horses (uses Main Camera)
+        var mainCam = Camera.main;
+        if (mainCam != null)
+        {
+            var camCtrl = mainCam.GetComponent<CameraController>();
+            if (camCtrl != null)
+            {
+                camCtrl.SetHorses(_horses);
+
+                // pass the start/finish transforms created for the track (use first created of each)
+                Transform startTransform = (_startLines != null && _startLines.Count > 0) ? _startLines[0].transform : null;
+                Transform finishTransform = (_finishLines != null && _finishLines.Count > 0) ? _finishLines[0].transform : null;
+                camCtrl.SetStartFinish(startTransform, finishTransform);
             }
         }
 
@@ -194,6 +212,7 @@ public class GameManager : MonoBehaviour
             {
                 GameObject finishLine = Instantiate(_finishLinePrefab, spawnPosition, Quaternion.identity);
                 finishLine.transform.SetParent(this.transform, true);
+                _finishLines.Add(finishLine);
             }
 
             sections.Add(inst);
@@ -274,7 +293,7 @@ public class GameManager : MonoBehaviour
                     _horseTrackIndices[lane] = target;
 
                     if (trackCount > 0)
-                        horse.TeleportTo(_trackLanes[lane][target].position);
+                        horse.MoveTo(_trackLanes[lane][target].position);
 
                     // check for winner, track before finish line
                     if (trackCount > 0 && target >= trackCount - 2)
