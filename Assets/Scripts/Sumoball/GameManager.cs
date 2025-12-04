@@ -142,7 +142,6 @@ namespace Sumoball
 
         private void Update()
         {
-            // Debug reset game with R key
             if (Input.GetKeyDown(KeyCode.R))
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);

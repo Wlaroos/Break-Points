@@ -1902,8 +1902,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _whoImage: {fileID: 1372597917}
   _isImage: {fileID: 766538756}
-  _fasterImage: {fileID: 1986532782}
-  _horseButtons:
+  _erImage: {fileID: 1986532782}
+  _choiceButtons:
   - {fileID: 2089798074}
   - {fileID: 795463246}
   - {fileID: 1432019444}
@@ -1914,15 +1914,15 @@ MonoBehaviour:
   - {fileID: 1185150502}
   - {fileID: 370463425}
   - {fileID: 208376202}
-  _horseColors:
+  _buttonColors:
   - serializedVersion: 2
-    rgba: 4283429773
+    rgba: 4281905184
   - serializedVersion: 2
     rgba: 4294492690
   - serializedVersion: 2
-    rgba: 4289438714
+    rgba: 4292360945
   - serializedVersion: 2
-    rgba: 4282957560
+    rgba: 4279406840
   _betSlider: {fileID: 1774515055}
   _betAmountText: {fileID: 931116804}
   _timerText: {fileID: 1803035941}
@@ -1932,6 +1932,8 @@ MonoBehaviour:
   _shakeTarget: {fileID: 1022176652}
   _shakeDuration: 0.2
   _shakeMagnitude: 20
+  _totalCoins: 500
+  _nextSceneName: MavMovin
 --- !u!1 &1731821522
 GameObject:
   m_ObjectHideFlags: 0
@@ -2672,7 +2674,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -1155815560, guid: e8a1b1eb13cd0ba4fad892aac3fee5f1, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

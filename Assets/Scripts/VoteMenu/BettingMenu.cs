@@ -6,29 +6,33 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System;
 
-public class MavMovinBet : MonoBehaviour
+public class BettingMenu : MonoBehaviour
 {
     [SerializeField] private Image _whoImage;
     [SerializeField] private Image _isImage;
-    [SerializeField] private Image _fasterImage;
-    [SerializeField] private Button[] _horseButtons;
+    [SerializeField] private Image _erImage;
+    [Space]
+    [SerializeField] private Button[] _choiceButtons;
     [SerializeField] private Button[] _betButtons;
-    [SerializeField] private Color32[] _horseColors;
+    [SerializeField] private Color32[] _buttonColors;
     [SerializeField] private Slider _betSlider;
+    [Space]
     [SerializeField] private TextMeshProUGUI _betAmountText;
     [SerializeField] private TextMeshProUGUI _timerText;
-
+    [Space]
     // Particle prefabs to instantiate as children of the UI images
     [SerializeField] private GameObject _smallParticles;
     [SerializeField] private GameObject _bigParticles;
     [SerializeField] private float _particleLifetime = 3f;
-
+    [Space]
     // Shake target (e.g. main camera or canvas root) and parameters
     [SerializeField] private Transform _shakeTarget;
     [SerializeField] private float _shakeDuration = 0.5f;
     [SerializeField] private float _shakeMagnitude = 8f;
-
+    [Space]
     [SerializeField] private int _totalCoins = 500;
+    [Space]
+    [SerializeField] private string _nextSceneName = "";
 
     private List<TimeTrigger> _triggers;
 
@@ -41,7 +45,7 @@ public class MavMovinBet : MonoBehaviour
 
         SetImageState(_whoImage, false);
         SetImageState(_isImage, false);
-        SetImageState(_fasterImage, false);
+        SetImageState(_erImage, false);
 
         DisableBetting();
 
@@ -55,13 +59,13 @@ public class MavMovinBet : MonoBehaviour
         if (_betSlider != null)
             _betSlider.onValueChanged.AddListener(UpdateBetAmountText);
 
-        if (_horseButtons != null)
+        if (_choiceButtons != null)
         {
-            for (int i = 0; i < _horseButtons.Length; i++)
+            for (int i = 0; i < _choiceButtons.Length; i++)
             {
                 int index = i; // capture
-                if (_horseButtons[i] != null)
-                    _horseButtons[i].onClick.AddListener(() => OnHorseButtonClicked(index));
+                if (_choiceButtons[i] != null)
+                    _choiceButtons[i].onClick.AddListener(() => OnHorseButtonClicked(index));
             }
         }
     }
@@ -71,9 +75,9 @@ public class MavMovinBet : MonoBehaviour
         if (_betSlider != null)
             _betSlider.onValueChanged.RemoveAllListeners();
 
-        if (_horseButtons != null)
+        if (_choiceButtons != null)
         {
-            foreach (var btn in _horseButtons)
+            foreach (var btn in _choiceButtons)
                 if (btn != null)
                     btn.onClick.RemoveAllListeners();
         }
@@ -94,8 +98,8 @@ public class MavMovinBet : MonoBehaviour
     private void UpdateColors(int selectedHorseIndex = -1)
     {
         Color color = Color.white;
-        if (selectedHorseIndex >= 0 && selectedHorseIndex < _horseColors.Length)
-            color = _horseColors[selectedHorseIndex];
+        if (selectedHorseIndex >= 0 && selectedHorseIndex < _buttonColors.Length)
+            color = _buttonColors[selectedHorseIndex];
 
         // get slider background and handle images once
         Image sliderBackground = null;
@@ -146,7 +150,7 @@ public class MavMovinBet : MonoBehaviour
 
         if (_timerText != null) _timerText.text = "0";
         DisableBetting();
-        SceneManager.LoadScene("MavMovin");
+        SceneManager.LoadScene(_nextSceneName);
     }
 
     private void InitializeTriggers()
@@ -167,9 +171,9 @@ public class MavMovinBet : MonoBehaviour
             }),
             new TimeTrigger(14f, () =>
             {
-                SetImageState(_fasterImage, true);
-                SpawnParticles(_smallParticles, _fasterImage?.transform);
-                SpawnParticles(_bigParticles, _fasterImage?.transform);
+                SetImageState(_erImage, true);
+                SpawnParticles(_smallParticles, _erImage?.transform);
+                SpawnParticles(_bigParticles, _erImage?.transform);
                 EnableBetting();
                 StartShake();
             })
@@ -216,14 +220,14 @@ public class MavMovinBet : MonoBehaviour
 
     private void DisableBetting()
     {
-        SetInteractable(_horseButtons, false);
+        SetInteractable(_choiceButtons, false);
         SetInteractable(_betButtons, false);
         if (_betSlider != null) _betSlider.interactable = false;
     }
 
     private void EnableBetting()
     {
-        SetInteractable(_horseButtons, true);
+        SetInteractable(_choiceButtons, true);
         SetInteractable(_betButtons, true);
         if (_betSlider != null) _betSlider.interactable = true;
     }
