@@ -188,7 +188,7 @@ public class MinigameVote : MonoBehaviour
         else
         {
             if (options != null && bestIndex < options.Count && !string.IsNullOrEmpty(options[bestIndex].sceneName))
-                SceneManager.LoadScene(options[bestIndex].sceneName);
+                SceneManager.LoadScene($"{options[bestIndex].sceneName}" + "BET");
         }
     }
 
@@ -206,7 +206,7 @@ public class MinigameVote : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         if (options != null && bestIndex < options.Count && !string.IsNullOrEmpty(options[bestIndex].sceneName))
-            SceneManager.LoadScene(options[bestIndex].sceneName);
+            SceneManager.LoadScene($"{options[bestIndex].sceneName}" + "BET");
     }
 
     private void UpdatePips()

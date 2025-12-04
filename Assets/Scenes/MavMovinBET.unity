@@ -225,7 +225,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: -10}
+  m_SizeDelta: {x: 10, y: -16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &158870964
 MonoBehaviour:
@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8490566, g: 0.4727152, b: 0.12415449, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1368,7 +1368,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1265572603}
   m_Layer: 5
-  m_Name: Handle Slide Area
+  m_Name: HandleSlideArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1743,8 +1743,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.75, y: -0.69000244}
-  m_SizeDelta: {x: 800, y: 40.05}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 800, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1515162134
 MonoBehaviour:
@@ -1759,7 +1759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1908,6 +1908,21 @@ MonoBehaviour:
   - {fileID: 795463246}
   - {fileID: 1432019444}
   - {fileID: 1435982759}
+  _betButtons:
+  - {fileID: 571831181}
+  - {fileID: 1783154383}
+  - {fileID: 1185150502}
+  - {fileID: 370463425}
+  - {fileID: 208376202}
+  _horseColors:
+  - serializedVersion: 2
+    rgba: 4283429773
+  - serializedVersion: 2
+    rgba: 4294492690
+  - serializedVersion: 2
+    rgba: 4289438714
+  - serializedVersion: 2
+    rgba: 4282957560
   _betSlider: {fileID: 1774515055}
   _betAmountText: {fileID: 931116804}
   _timerText: {fileID: 1803035941}
@@ -2154,7 +2169,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.379
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

@@ -2,6 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using System;
 
 public class MavMovinBet : MonoBehaviour
 {
@@ -9,6 +12,8 @@ public class MavMovinBet : MonoBehaviour
     [SerializeField] private Image _isImage;
     [SerializeField] private Image _fasterImage;
     [SerializeField] private Button[] _horseButtons;
+    [SerializeField] private Button[] _betButtons;
+    [SerializeField] private Color32[] _horseColors;
     [SerializeField] private Slider _betSlider;
     [SerializeField] private TextMeshProUGUI _betAmountText;
     [SerializeField] private TextMeshProUGUI _timerText;
@@ -23,80 +28,172 @@ public class MavMovinBet : MonoBehaviour
     [SerializeField] private float _shakeDuration = 0.5f;
     [SerializeField] private float _shakeMagnitude = 8f;
 
-    private float _totalCoins = 500;
+    [SerializeField] private int _totalCoins = 500;
+
+    private List<TimeTrigger> _triggers;
 
     private void Awake()
     {
-        _betSlider.value = 0;
+        _betSlider = _betSlider ?? GetComponentInChildren<Slider>();
+        _betAmountText = _betAmountText;
+        _betSlider.value = 0f;
         UpdateBetAmountText();
 
-        _whoImage.enabled = false;
-        _isImage.enabled = false;
-        _fasterImage.enabled = false;
+        SetImageState(_whoImage, false);
+        SetImageState(_isImage, false);
+        SetImageState(_fasterImage, false);
 
         DisableBetting();
+
+        InitializeTriggers();
 
         StartCoroutine(TimerCoroutine());
     }
 
     private void OnEnable()
     {
-        _betSlider.onValueChanged.AddListener(delegate { UpdateBetAmountText(); });
-    }
-    private void OnDisable()
-    {
-        _betSlider.onValueChanged.RemoveAllListeners();
+        if (_betSlider != null)
+            _betSlider.onValueChanged.AddListener(UpdateBetAmountText);
+
+        if (_horseButtons != null)
+        {
+            for (int i = 0; i < _horseButtons.Length; i++)
+            {
+                int index = i; // capture
+                if (_horseButtons[i] != null)
+                    _horseButtons[i].onClick.AddListener(() => OnHorseButtonClicked(index));
+            }
+        }
     }
 
-    private void UpdateBetAmountText()
+    private void OnDisable()
     {
-        float betAmount = _betSlider.value * _totalCoins;
-        _betAmountText.text = $"{Mathf.RoundToInt(betAmount)} / {_totalCoins}";
+        if (_betSlider != null)
+            _betSlider.onValueChanged.RemoveAllListeners();
+
+        if (_horseButtons != null)
+        {
+            foreach (var btn in _horseButtons)
+                if (btn != null)
+                    btn.onClick.RemoveAllListeners();
+        }
+    }
+
+    private void UpdateBetAmountText(float _ = 0f)
+    {
+        var betAmount = Mathf.RoundToInt(_betSlider.value * _totalCoins);
+        if (_betAmountText != null)
+            _betAmountText.text = $"{betAmount} / {_totalCoins}";
+    }
+
+    private void OnHorseButtonClicked(int selectedHorseIndex)
+    {
+        UpdateColors(selectedHorseIndex);
+    }
+
+    private void UpdateColors(int selectedHorseIndex = -1)
+    {
+        Color color = Color.white;
+        if (selectedHorseIndex >= 0 && selectedHorseIndex < _horseColors.Length)
+            color = _horseColors[selectedHorseIndex];
+
+        // get slider background and handle images once
+        Image sliderBackground = null;
+        Image sliderHandle = null;
+        if (_betSlider != null)
+        {
+            var bg = _betSlider.transform.Find("Background");
+            if (bg != null) sliderBackground = bg.GetComponent<Image>();
+            var handleArea = _betSlider.transform.Find("HandleSlideArea");
+            if (handleArea != null) sliderHandle = handleArea.GetComponentInChildren<Image>();
+        }
+
+        if (_betButtons != null)
+        {
+            foreach (var button in _betButtons)
+            {
+                if (button == null) continue;
+                var img = button.GetComponent<Image>();
+                if (img != null) img.color = color;
+                if (sliderBackground != null) sliderBackground.color = color;
+                if (sliderHandle != null) sliderHandle.color = color;
+            }
+        }
     }
 
     private IEnumerator TimerCoroutine()
     {
-        float timeLeft = 20;
-        while (timeLeft > 0)
+        float timeLeft = 20f;
+        const float step = 0.5f;
+
+        while (timeLeft > 0f)
         {
-            switch (timeLeft)
+            // execute any triggers whose time is >= current timeLeft and not yet fired
+            foreach (var t in _triggers)
             {
-                case 18f:
-                    _whoImage.enabled = true;
-                    SpawnParticles(_smallParticles, _whoImage.transform);
-                    StartCoroutine(Shake(_shakeDuration, _shakeMagnitude));
-                    break;
-                case 16f:
-                    _isImage.enabled = true;
-                    SpawnParticles(_smallParticles, _isImage.transform);
-                    StartCoroutine(Shake(_shakeDuration, _shakeMagnitude));
-                    break;
-                case 14f:
-                    _fasterImage.enabled = true;
-                    SpawnParticles(_smallParticles, _fasterImage.transform);
-                    SpawnParticles(_bigParticles, _fasterImage.transform);
-                    EnableBetting();
-                    StartCoroutine(Shake(_shakeDuration, _shakeMagnitude));
-                    break;
+                if (!t.Fired && timeLeft <= t.Time)
+                {
+                    t.Execute();
+                }
             }
 
-            _timerText.text = timeLeft.ToString();
-            yield return new WaitForSeconds(0.5f);
-            timeLeft -= 0.5f;
+            if (_timerText != null)
+                _timerText.text = Mathf.CeilToInt(timeLeft).ToString();
+
+            yield return new WaitForSeconds(step);
+            timeLeft -= step;
         }
-        _timerText.text = "0";
+
+        if (_timerText != null) _timerText.text = "0";
         DisableBetting();
+        SceneManager.LoadScene("MavMovin");
+    }
+
+    private void InitializeTriggers()
+    {
+        _triggers = new List<TimeTrigger>
+        {
+            new TimeTrigger(18f, () =>
+            {
+                SetImageState(_whoImage, true);
+                SpawnParticles(_smallParticles, _whoImage?.transform);
+                StartShake();
+            }),
+            new TimeTrigger(16f, () =>
+            {
+                SetImageState(_isImage, true);
+                SpawnParticles(_smallParticles, _isImage?.transform);
+                StartShake();
+            }),
+            new TimeTrigger(14f, () =>
+            {
+                SetImageState(_fasterImage, true);
+                SpawnParticles(_smallParticles, _fasterImage?.transform);
+                SpawnParticles(_bigParticles, _fasterImage?.transform);
+                EnableBetting();
+                StartShake();
+            })
+        };
+    }
+
+    private void SetImageState(Image img, bool enabled)
+    {
+        if (img != null) img.enabled = enabled;
+    }
+
+    private void StartShake()
+    {
+        if (_shakeTarget != null && _shakeDuration > 0f && _shakeMagnitude > 0f)
+            StartCoroutine(Shake(_shakeDuration, _shakeMagnitude));
     }
 
     private void SpawnParticles(GameObject prefab, Transform parent)
     {
         if (prefab == null || parent == null) return;
         var instance = Instantiate(prefab, parent);
-        // ensure it appears on top of the UI element
         if (instance.transform is RectTransform rt)
             rt.SetAsLastSibling();
         Destroy(instance, _particleLifetime);
-        // if prefab has a ParticleSystem, play immediately
         var ps = instance.GetComponent<ParticleSystem>();
         if (ps != null) ps.Play();
     }
@@ -108,8 +205,8 @@ public class MavMovinBet : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < duration)
         {
-            float x = Random.Range(-1f, 1f) * magnitude;
-            float y = Random.Range(-1f, 1f) * magnitude;
+            float x = UnityEngine.Random.Range(-1f, 1f) * magnitude;
+            float y = UnityEngine.Random.Range(-1f, 1f) * magnitude;
             _shakeTarget.localPosition = originalPos + new Vector3(x, y, 0f);
             elapsed += Time.deltaTime;
             yield return null;
@@ -119,19 +216,44 @@ public class MavMovinBet : MonoBehaviour
 
     private void DisableBetting()
     {
-        foreach (var button in _horseButtons)
-        {
-            button.interactable = false;
-        }
-        _betSlider.interactable = false;
+        SetInteractable(_horseButtons, false);
+        SetInteractable(_betButtons, false);
+        if (_betSlider != null) _betSlider.interactable = false;
     }
 
     private void EnableBetting()
     {
-        foreach (var button in _horseButtons)
+        SetInteractable(_horseButtons, true);
+        SetInteractable(_betButtons, true);
+        if (_betSlider != null) _betSlider.interactable = true;
+    }
+
+    private void SetInteractable(IEnumerable<Button> buttons, bool value)
+    {
+        if (buttons == null) return;
+        foreach (var b in buttons)
+            if (b != null) b.interactable = value;
+    }
+
+    // helper trigger class
+    private class TimeTrigger
+    {
+        public float Time { get; }
+        private readonly Action _action;
+        public bool Fired { get; private set; }
+
+        public TimeTrigger(float time, Action action)
         {
-            button.interactable = true;
+            Time = time;
+            _action = action;
+            Fired = false;
         }
-        _betSlider.interactable = true;
+
+        public void Execute()
+        {
+            if (Fired) return;
+            _action?.Invoke();
+            Fired = true;
+        }
     }
 }
