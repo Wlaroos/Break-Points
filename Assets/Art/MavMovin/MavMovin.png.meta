@@ -114,7 +114,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 2
-        y: 33
+        y: 72
         width: 18
         height: 16
       alignment: 9
@@ -135,7 +135,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 20
-        y: 33
+        y: 72
         width: 18
         height: 20
       alignment: 9
@@ -156,7 +156,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 46
-        y: 31
+        y: 70
         width: 11
         height: 20
       alignment: 9
@@ -177,7 +177,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 8
-        y: 2
+        y: 41
         width: 9
         height: 11
       alignment: 9
@@ -198,7 +198,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 2
-        y: 15
+        y: 54
         width: 18
         height: 16
       alignment: 9
@@ -219,7 +219,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 20
-        y: 15
+        y: 54
         width: 18
         height: 16
       alignment: 9
@@ -240,7 +240,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 41
-        y: 15
+        y: 54
         width: 21
         height: 13
       alignment: 9
@@ -261,7 +261,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 115
-        y: 15
+        y: 54
         width: 25
         height: 16
       alignment: 9
@@ -282,7 +282,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 142
-        y: 15
+        y: 54
         width: 33
         height: 16
       alignment: 0
@@ -303,7 +303,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 142
-        y: 34
+        y: 73
         width: 33
         height: 16
       alignment: 0
@@ -324,7 +324,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 115
-        y: 34
+        y: 73
         width: 25
         height: 16
       alignment: 9
@@ -345,7 +345,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 70
-        y: 31
+        y: 70
         width: 11
         height: 20
       alignment: 9
@@ -366,7 +366,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 94
-        y: 31
+        y: 70
         width: 11
         height: 20
       alignment: 9
@@ -387,7 +387,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 65
-        y: 15
+        y: 54
         width: 22
         height: 13
       alignment: 9
@@ -408,7 +408,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 90
-        y: 15
+        y: 54
         width: 21
         height: 13
       alignment: 9
@@ -420,6 +420,216 @@ TextureImporter:
       bones: []
       spriteID: 20b9d975b0202254bb24ddc810d45887
       internalID: -608046673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_15
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 56
+        width: 63
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be48cd4e285a6334aa2ee3511251d3a6
+      internalID: 153974118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_16
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 34
+        width: 25
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.875}
+      border: {x: 3, y: 0, z: 3, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3bd07b34985a7a0469be8082f8d10958
+      internalID: 2010471263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_17
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 34
+        width: 25
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.875}
+      border: {x: 3, y: 0, z: 3, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4447a7e1032130b4585db3db3aff2807
+      internalID: -1394232034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_18
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 34
+        width: 25
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.875}
+      border: {x: 3, y: 0, z: 3, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccb36acf46f200a4b9287215b0a5aa46
+      internalID: -1876785684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_19
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 34
+        width: 25
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.875}
+      border: {x: 3, y: 0, z: 3, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16d203e4a71bbc745af92d1c78f2241b
+      internalID: -1896109007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_20
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 34
+        width: 25
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: 0.875}
+      border: {x: 3, y: 0, z: 3, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38c4740944d3e4642bc9fe8d2afbf33a
+      internalID: -898112877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_21
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 2
+        width: 7
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd8b29ad1ce5342498a5fcf3128810d8
+      internalID: 949593510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_22
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 2
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99aa0566b17258940aa8e6beb3577497
+      internalID: 603185173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_23
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 2
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff06e222f54c4b743967abf5eba1f340
+      internalID: 65091293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MavMovin_24
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 2
+        width: 102
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce28fd53d1c4ee04da18a4878a01cf20
+      internalID: 1872270824
       vertices: []
       indices: 
       edges: []
@@ -442,7 +652,17 @@ TextureImporter:
       MavMovin_12: 1537593645
       MavMovin_13: 1779768724
       MavMovin_14: -608046673
+      MavMovin_15: 153974118
+      MavMovin_16: 2010471263
+      MavMovin_17: -1394232034
+      MavMovin_18: -1876785684
+      MavMovin_19: -1896109007
       MavMovin_2: -875947865
+      MavMovin_20: -898112877
+      MavMovin_21: 949593510
+      MavMovin_22: 603185173
+      MavMovin_23: 65091293
+      MavMovin_24: 1872270824
       MavMovin_3: 1938522099
       MavMovin_4: 1309795084
       MavMovin_5: 915042107

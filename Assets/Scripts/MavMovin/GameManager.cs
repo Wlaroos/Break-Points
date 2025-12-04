@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _startLinePrefab;
     [SerializeField] GameObject _finishLinePrefab;
     [SerializeField] GameObject _obstaclePrefab;
+    [SerializeField] private WinnerPopup _winnerPopup;
 
     private Color _horseGizmoColor = Color.cyan;
     private Color _startTrackGizmoColor = Color.green;
@@ -303,6 +304,7 @@ public class GameManager : MonoBehaviour
                             string horseName = !string.IsNullOrEmpty(horse.gameObject.name) ? horse.gameObject.name : $"Horse {lane + 1}";
                             _canvasManager.AnnounceWinner(lane, horseName, horse.DisplayColor);
                             _canvasManager.ShowRaceEnd();
+                            _winnerPopup.ShowWinnerPopup(lane);
                         }
                         yield break; // stop the race
                     }
