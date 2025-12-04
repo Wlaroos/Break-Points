@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 65091293, guid: 722a4c481afb0744e917bc0df408c538, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.34117648}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -120,4 +120,4 @@ MonoBehaviour:
   _rotateFrequency: 0.5
   _canHover: 1
   _hoverAmplitude: 0.2
-  _hoverFrequency: 1
+  _hoverFrequency: 5
