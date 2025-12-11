@@ -41,7 +41,6 @@ public class BettingMenu : MonoBehaviour
     private void Awake()
     {
         _betSlider = _betSlider ?? GetComponentInChildren<Slider>();
-        _betAmountText = _betAmountText;
         _betSlider.value = 0f;
         UpdateBetAmountText();
 
