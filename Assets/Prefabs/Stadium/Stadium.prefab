@@ -47,7 +47,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3730195188616921624, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_Name
-      value: MavMovin_24 (4)
+      value: Stand
       objectReference: {fileID: 0}
     - target: {fileID: 8609856524281108065, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -109,7 +109,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3730195188616921624, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_Name
-      value: MavMovin_24 (3)
+      value: Stand
       objectReference: {fileID: 0}
     - target: {fileID: 8609856524281108065, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -171,7 +171,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3730195188616921624, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_Name
-      value: MavMovin_24 (5)
+      value: Stand
       objectReference: {fileID: 0}
     - target: {fileID: 8609856524281108065, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -233,7 +233,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3730195188616921624, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_Name
-      value: MavMovin_24 (2)
+      value: Stand
       objectReference: {fileID: 0}
     - target: {fileID: 8609856524281108065, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -295,7 +295,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3730195188616921624, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_Name
-      value: MavMovin_24
+      value: Stand
       objectReference: {fileID: 0}
     - target: {fileID: 8609856524281108065, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -357,7 +357,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3730195188616921624, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_Name
-      value: MavMovin_24 (1)
+      value: Stand
       objectReference: {fileID: 0}
     - target: {fileID: 8609856524281108065, guid: 338992c615588b14b987bc4c0d4b730b, type: 3}
       propertyPath: m_LocalPosition.x

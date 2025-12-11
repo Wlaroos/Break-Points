@@ -92,7 +92,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -5
   m_Sprite: {fileID: 1872270824, guid: 722a4c481afb0744e917bc0df408c538, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.34117648}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -239,7 +239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (7)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -305,7 +305,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (3)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -371,7 +371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (2)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -437,7 +437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (9)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -503,7 +503,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (12)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -569,7 +569,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (11)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -635,7 +635,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (10)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -701,7 +701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (8)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -767,7 +767,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (5)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -833,7 +833,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (13)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -899,7 +899,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (4)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -965,7 +965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (6)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1031,7 +1031,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (14)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1097,7 +1097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (15)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1163,7 +1163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (1)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1229,7 +1229,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23 (16)
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1295,7 +1295,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8547905628004619027, guid: 71375829daa1c4f458b457772482706a, type: 3}
       propertyPath: m_Name
-      value: MavMovin_23
+      value: Fan
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

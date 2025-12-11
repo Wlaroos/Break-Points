@@ -35,6 +35,8 @@ public class BettingMenu : MonoBehaviour
     [SerializeField] private string _nextSceneName = "";
 
     private List<TimeTrigger> _triggers;
+    private Action _onBettingFinished;
+    [SerializeField] private bool _startImmediately = false;
 
     private void Awake()
     {
@@ -51,7 +53,10 @@ public class BettingMenu : MonoBehaviour
 
         InitializeTriggers();
 
-        StartCoroutine(TimerCoroutine());
+        if (_startImmediately)
+        {
+            StartCoroutine(TimerCoroutine());
+        }
     }
 
     private void OnEnable()
@@ -150,7 +155,15 @@ public class BettingMenu : MonoBehaviour
 
         if (_timerText != null) _timerText.text = "0";
         DisableBetting();
-        SceneManager.LoadScene(_nextSceneName);
+        if(_startImmediately)
+        {
+            SceneManager.LoadScene(_nextSceneName);
+        }
+        else
+        {
+            _onBettingFinished?.Invoke();
+            _onBettingFinished = null;
+        }
     }
 
     private void InitializeTriggers()
@@ -237,6 +250,24 @@ public class BettingMenu : MonoBehaviour
         if (buttons == null) return;
         foreach (var b in buttons)
             if (b != null) b.interactable = value;
+    }
+
+    public void BeginBetting(Action onFinished = null)
+    {
+        _onBettingFinished = onFinished;
+
+        // reset state
+        StopAllCoroutines();
+        DisableBetting();
+
+        // reset images and triggers
+        SetImageState(_whoImage, false);
+        SetImageState(_isImage, false);
+        SetImageState(_erImage, false);
+
+        InitializeTriggers();
+
+        StartCoroutine(TimerCoroutine());
     }
 
     // helper trigger class

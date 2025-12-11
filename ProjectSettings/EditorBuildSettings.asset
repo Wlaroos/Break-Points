@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MavMovin.unity
     guid: 395db40438fac0043bcdfb92c72c14b9
+  - enabled: 1
+    path: Assets/Scenes/CupShuffle.unity
+    guid: a3711a80c35d7364b9766d065994f87b
   m_configObjects: {}
