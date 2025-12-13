@@ -25,8 +25,8 @@ namespace Sumoball
 
         public void ShowMoves(RPSMove left, RPSMove right)
         {
-            if (_leftMoveText) { _leftMoveText.text = "Left: " + left.ToString(); _leftMoveText.color = _leftColor; }
-            if (_rightMoveText) { _rightMoveText.text = "Right: " + right.ToString(); _rightMoveText.color = _rightColor; }
+            if (_leftMoveText) { _leftMoveText.text = "Pushmo: " + left.ToString(); _leftMoveText.color = _leftColor; }
+            if (_rightMoveText) { _rightMoveText.text = "Trunks: " + right.ToString(); _rightMoveText.color = _rightColor; }
         }
 
         public void ShowCountdown(int seconds)

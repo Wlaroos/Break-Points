@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [Header("Game Settings")]
     [SerializeField] private float _tickTimeSeconds = 1f;
     public float TickTimeSeconds => _tickTimeSeconds;
+    [SerializeField] private bool _goIndefinitely = false; // Checkbox for indefinite game mode
     [Header("Track Settings")]
     [SerializeField] private GameObject _trackSectionPrefab;
     [SerializeField] private GameObject _smoothTrackSectionPrefab;
@@ -306,12 +307,40 @@ public class GameManager : MonoBehaviour
                             _canvasManager.ShowRaceEnd();
                             _winnerPopup.ShowWinnerPopup(lane);
                         }
-                        yield break; // stop the race
+
+                        if (_goIndefinitely)
+                        {
+                            yield return new WaitForSeconds(5f); // Wait 3 seconds before resetting
+                            _winnerPopup.HideWinnerPopup(); // Hide the winner popup
+                            StopAllCoroutines(); // Stop the timer and all ongoing coroutines
+                            ResetGame();
+                        }
+                        else
+                        {
+                            yield break; // stop the race
+                        }
                     }
                 }
             }
             yield return wait;
         }
+    }
+
+    private void ResetGame()
+    {
+        // Reset all horses to their starting positions
+        for (int lane = 0; lane < _horses.Count; lane++)
+        {
+            Horse horse = _horses[lane];
+            if (horse != null && _trackLanes.Count > lane && _trackLanes[lane].Count > 0)
+            {
+                horse.MoveTo(_trackLanes[lane][0].position);
+                _horseTrackIndices[lane] = 0;
+            }
+        }
+
+        // Restart the race
+        StartCoroutine(TickLoop());
     }
 
     // Draw gizmos for spawn origin, horse positions and track sections.

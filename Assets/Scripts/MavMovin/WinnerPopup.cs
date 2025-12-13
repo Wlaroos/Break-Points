@@ -11,6 +11,7 @@ public class WinnerPopup : MonoBehaviour
     private CanvasGroup _canvasGroup;
     private ParticleSystem _confettiParticles01;
     private ParticleSystem _confettiParticles02;
+    private AudioSource _audioSource;
 
     private void Awake() 
     {
@@ -19,6 +20,7 @@ public class WinnerPopup : MonoBehaviour
         _canvasGroup = GetComponent<CanvasGroup>();
         _confettiParticles01 = GameObject.Find("ConfettiParticles01").GetComponent<ParticleSystem>();
         _confettiParticles02 = GameObject.Find("ConfettiParticles02").GetComponent<ParticleSystem>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public void ShowWinnerPopup(int horseIndex)
@@ -29,5 +31,15 @@ public class WinnerPopup : MonoBehaviour
 
         _confettiParticles01.Play();
         _confettiParticles02.Play();
+        _audioSource.Play();
+    }
+
+    public void HideWinnerPopup()
+    {
+        _canvasGroup.alpha = 0; // Hide the popup
+
+        _confettiParticles01.Stop(); // Stop confetti particles
+        _confettiParticles02.Stop();
+        _audioSource.Stop(); // Stop audio
     }
 }

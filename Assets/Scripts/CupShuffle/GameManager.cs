@@ -29,6 +29,10 @@ namespace CupShuffle
         [Header("Betting")]
         [SerializeField] private BettingMenu _bettingMenu;
 
+        [Header("SFX")]
+        [SerializeField] private AudioClip[] _sfxClips;
+        private AudioSource _audioSource;
+
         private int _ballCupIndex;        // Index of the cup hiding the ball
         private bool _isShuffling = false;
         private bool _isGuessing = false;
@@ -41,6 +45,8 @@ namespace CupShuffle
 
         private void Start()
         {
+            _audioSource = GetComponent<AudioSource>();
+
             if (!ValidateSetup())
                 return;
 
@@ -327,11 +333,13 @@ namespace CupShuffle
             {
                 Debug.Log("Correct! You found the ball!");
                 _countdownText.text = "Correct!";
+                _audioSource.PlayOneShot(_sfxClips[1]); // Play correct sound
             }
             else
             {
                 Debug.Log($"Wrong! The ball was under cup {_ballCupIndex + 1}");
                 _countdownText.text = "Wrong!";
+                _audioSource.PlayOneShot(_sfxClips[0]); // Play wrong sound
             }
 
             // Detach the ball from the cup and move it slightly upward to reveal it

@@ -38,6 +38,10 @@ public class BettingMenu : MonoBehaviour
     private Action _onBettingFinished;
     [SerializeField] private bool _startImmediately = false;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip[] _sfxClips;
+    private AudioSource _audioSource;
+
     private void Awake()
     {
         _betSlider = _betSlider ?? GetComponentInChildren<Slider>();
@@ -56,6 +60,8 @@ public class BettingMenu : MonoBehaviour
         {
             StartCoroutine(TimerCoroutine());
         }
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -94,9 +100,18 @@ public class BettingMenu : MonoBehaviour
             _betAmountText.text = $"{betAmount} / {_totalCoins}";
     }
 
+    private void PlaySFX(int index)
+    {
+        if (_audioSource != null && _sfxClips != null && index >= 0 && index < _sfxClips.Length)
+        {
+            _audioSource.PlayOneShot(_sfxClips[index]);
+        }
+    }
+
     private void OnHorseButtonClicked(int selectedHorseIndex)
     {
         UpdateColors(selectedHorseIndex);
+        PlaySFX(3);
     }
 
     private void UpdateColors(int selectedHorseIndex = -1)
@@ -174,12 +189,14 @@ public class BettingMenu : MonoBehaviour
                 SetImageState(_whoImage, true);
                 SpawnParticles(_smallParticles, _whoImage?.transform);
                 StartShake();
+                PlaySFX(0);
             }),
             new TimeTrigger(16f, () =>
             {
                 SetImageState(_isImage, true);
                 SpawnParticles(_smallParticles, _isImage?.transform);
                 StartShake();
+                PlaySFX(1);
             }),
             new TimeTrigger(14f, () =>
             {
@@ -188,6 +205,7 @@ public class BettingMenu : MonoBehaviour
                 SpawnParticles(_bigParticles, _erImage?.transform);
                 EnableBetting();
                 StartShake();
+                PlaySFX(2);
             })
         };
     }

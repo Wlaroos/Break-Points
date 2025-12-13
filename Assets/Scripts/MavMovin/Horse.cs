@@ -34,6 +34,13 @@ public class Horse : MonoBehaviour
     [SerializeField] private Color _displayColor;
     public Color DisplayColor => _displayColor;
 
+    [Space]
+    [Space]
+    [Space]
+
+    [SerializeField] private AudioClip[] _blipSFX;
+    private AudioSource _audioSource;
+
     private float _moveLerpDuration;
 
     private Coroutine _moveCoroutine;
@@ -56,8 +63,8 @@ public class Horse : MonoBehaviour
     void Awake()
     {
         _moveLerpDuration = FindObjectOfType<GameManager>().TickTimeSeconds / 2;
-
         _anim = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public void MoveTo(Vector3 worldPos)
@@ -81,6 +88,7 @@ public class Horse : MonoBehaviour
 
     private IEnumerator MoveToCoroutine(Vector3 target, float duration)
     {
+        _audioSource?.PlayOneShot(_blipSFX[Random.Range(0, _blipSFX.Length)]);
         _anim?.SetBool("isMoving", true);
         
         Vector3 start = transform.position;
